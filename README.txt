@@ -1,4 +1,4 @@
-ƒjƒR¶ƒNƒ[ƒ€
+ãƒ‹ã‚³ç”Ÿã‚¯ãƒ­ãƒ¼ãƒ 
 ==============
 
 License
@@ -6,9 +6,9 @@ License
 The MIT License.
 PLEASE READ LICENSE.txt
 
-ŠT—v
+æ¦‚è¦
 ====
-ƒjƒRƒjƒR¶•ú‘—‚ÌƒRƒƒ“ƒg‚ªŽ‹’®‚Å‚«‚éChrome‚ÌŠg’£ƒAƒvƒŠƒP[ƒVƒ‡ƒ“B
-https://github.com/nus/CommentViewerForGoogleChrome‚Ì
-uƒRƒƒ“ƒgƒrƒ…ƒ[ for Google Chromev‚ðŽQl‚ÉŠg’£‚µ‚Ä‚¢‚­—\’è‚Å‚·B
+ãƒ‹ã‚³ãƒ‹ã‚³ç”Ÿæ”¾é€ã®ã‚³ãƒ¡ãƒ³ãƒˆãŒè¦–è´ã§ãã‚‹Chromeã®æ‹¡å¼µã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã€‚
+https://github.com/nus/CommentViewerForGoogleChromeã®
+ã€Œã‚³ãƒ¡ãƒ³ãƒˆãƒ“ãƒ¥ãƒ¯ãƒ¼ for Google Chromeã€ã‚’å‚è€ƒã«æ‹¡å¼µã—ã¦ã„ãäºˆå®šã§ã™ã€‚
 
