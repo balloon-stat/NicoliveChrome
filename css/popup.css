@@ -1,0 +1,25 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#plugin {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+}
+
+#menu {
+	height: 20px;
+	margin: 0px;
+	padding-left: 10px;
+	width: 80%;
+}
+
+#menu li {
+	float: left;
+	margin: 0px;
+	list-style-type: none;
+	margin-right: 20px;
+}
+
