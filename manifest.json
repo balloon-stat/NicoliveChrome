@@ -12,10 +12,9 @@
 		"48": "img/icon48.png"
 	},
 	"plugins": [
-		{"path": "NicoClientPlugin.dll"}
+		{"path": "lib/NicoClientPlugin.dll"}
 	],
 	"permissions": [
-		"tabs",
 		"http://watch.live.nicovideo.jp/",
 		"http://live.nicovideo.jp/watch/",
 		"http://www.nicovideo.jp/user/"
