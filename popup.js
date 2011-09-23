@@ -3,6 +3,8 @@
 		live_info,
 		tid,
 		bDiv,
+		comment_id = 0,
+		popup_menu,
 		is_cache = false,
 		comments = [],
 		is_first = true,
@@ -16,32 +18,47 @@
 		},
 		commentUpdate = function(comment) {
 			var s_offset;
-			if (!comment) {
+
+			if (comment) {
+				comment_id++;
+				comments.push({
+					id: comment_id,
+					cell: [
+						comment['no'],
+						comment['message'],
+						comment['user_id'],
+						comment['vpos']
+					]
+				});
+				return;
+			}
+
+			s_offset = bDiv[0].scrollHeight - bDiv.scrollTop() - bDiv[0].clientHeight;
+			if (is_first) {
+				is_first = false;
 				$('#comments').flexAddData({
 					total: 1,
 					page: 1,
 					rows: comments
 				});
-				return;
+				bDiv.scrollTop(bDiv[0].scrollHeight);
+			} else {
+				$('#comments').flexAppendData({
+					total: 1,
+					page: 1,
+					rows: comments
+				}, ':last');
 			}
-			comments.push({
-				id: comments.length,
-				cell: [
-					comment['no'],
-					comment['message'],
-					comment['user_id'],
-					comment['vpos']
-				]
-			});
-			s_offset = bDiv[0].scrollHeight - bDiv[0].clientHeight - bDiv.scrollTop();
-			
-			if (s_offset === 0 || is_first) {
+			$('#comments').find('tr')
+				.each(function(){
+					var popup = $.extend({}, popup_menu);
+					popup.bind(this);
+				});
+			if (s_offset === 0) {
 				console.log('ture');
-				is_first = false;
-				// TODO スクロールされない(スクロールチェックもNG)
-				bDiv[0].scrollTop = bDiv[0].scrollHeight + bDiv[0].scrollHeight;
-				//document.body.scrollTop = document.body.clientHeight;
+				bDiv.scrollTop(bDiv[0].scrollHeight);
 			}
+			comments = [];
 		},
 		commentCheck = function() {
 			var comment = nicolive.getComment();
@@ -71,17 +88,46 @@
 	live_info = getLiveInfo();
 	document.title = live_info[1];
 	nicolive = new $.nico.live(live_info[0]);
+	
+	popup_menu = new PopupMenu();
+	popup_menu.add('ユーザー情報', function(target) {
+		console.log(target);
+	})
+		.addSeparator()
+		.add('名前をつける', function(target) {
+			
+		})
+		.add('色をつける', function(target) {
+			
+		})
+		.addSeparator()
+		.add('コメントをコピー', function(target) {
+			
+		})
+		.add('IDをコピー', function(target) {
+			
+		})
+		.addSeparator()
+		.add('一時的に表示する', function(target) {
+			
+		})
+		.addSeparator()
+		.add('プロフィールページを開く', function(target) {
+			
+		});
+	popup_menu.setSize(180, 0);
 
 	nicolive.getPlayerStatusXML(function() {
 		nicolive.connectCommentServer(function() {
 			$('#comments').flexigrid({
 				colModel : [
-					{display: 'No.', name : 'no', width : 15, sortable : true, align: 'center'},
+					{display: 'No.', name : 'no', width : 25, sortable : true, align: 'center'},
 					{display: 'コメント', name : 'message', width : 600, sortable : true, align: 'left'},
 					{display: 'ユーザー', name : 'user_id', width : 80, sortable : true, align: 'center'},
 					{display: '時刻', name : 'date', width : 40, sortable : true, align: 'center'}
 				],
-				height: 'auto',
+				height: '300',
+				resizable: false,
 				sortname: 'no',
 				sortorder: 'asc',
 				nowrap: false,
