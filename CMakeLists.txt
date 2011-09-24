@@ -1,0 +1,30 @@
+PROJECT(CPPBUILD)                                                                                                     
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
+ 
+IF(WIN32)
+    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
+ENDIF(WIN32)
+IF(UNIX)
+    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include)
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
+ENDIF(UNIX)
+ 
+OPTION(MAKE_MODULE "make as module." true)
+OPTION(MAKE_SHARED "make as shared" false)
+OPTION(MAKE_STATIC "make as static" false)
+ 
+SET(OUTPUT_FILENAME "NiconamaClient" CACHE STRING "Please set output filename.")
+ 
+SET(INFO_OUTFILE_NAME "niconamaclient" CACHE STRING "niconamaclient.cc build")
+ 
+IF(MAKE_STATIC)
+    ADD_LIBRARY(${OUTPUT_FILENAME} STATIC ${PROJECT_SOURCE_DIR}/NiconamaClient.cpp)
+    ADD_LIBRARY(${niconamaclient} STATIC ${PROJECT_SOURCE_DIR}/niconamaclient.cc)
+ELSEIF(MAKE_SHARED)
+    ADD_LIBRARY(${OUTPUT_FILENAME} SHARED ${PROJECT_SOURCE_DIR}/NiconamaClient.cpp)
+    ADD_LIBRARY(${niconamaclient} SHARED ${PROJECT_SOURCE_DIR}/niconamaclient.cc)
+ELSEIF(MAKE_MODULE)
+    ADD_LIBRARY(${OUTPUT_FILENAME} MODULE ${PROJECT_SOURCE_DIR}/NiconamaClient.cpp)
+    ADD_LIBRARY(${niconamaclient} MODULE ${PROJECT_SOURCE_DIR}/niconamaclient.cc)
+ENDIF()

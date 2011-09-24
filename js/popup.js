@@ -3,6 +3,7 @@
 		live_info,
 		tid,
 		bDiv,
+		refreshSwatch,
 		comment_id = 0,
 		is_cache = false,
 		comments = [],
@@ -48,7 +49,7 @@
 					rows: comments
 				}, ':last');
 			}
-			$('#comments').find('tr')
+			$('#comments tr')
 				.each(function(){
 					$(this).bind('contextmenu', function() {
 						console.log('context select');
@@ -59,38 +60,14 @@
 						widthOverflowOffset: 0,
 						heightOverflowOffset: 3,
 						onSelect: function(e, target) {
-							// TODO jQuery UI Dialogで小窓のモーダレス
 							console.log(this);
 							console.log(e);
 							console.log(target);
-							switch($(this).attr('id')) {
-								case 'user_info':
-									console.log('ユーザー情報');
-									break;
-								case 'naming':
-									console.log('名前をつける');
-									break;
-								case 'coloring':
-									console.log('色をつける');
-									break;
-								case 'comment_copy':
-									console.log('コメントをコピー');
-									break;
-								case 'id_copy':
-									console.log('IDをコピー');
-									break;
-								case 'tmp_hide':
-									console.log('一時的に非表示');
-									break;
-								case 'profile_page':
-									console.log('プロフィールページを開く');
-									break;
-								default:
-									return false;
-							}
+							$.contextSelect($(this).attr('id'), target);
 						}
 					});
-				});
+				})
+			;
 			if (s_offset === 0) {
 				bDiv.scrollTop(bDiv[0].scrollHeight);
 			}
@@ -99,21 +76,23 @@
 		commentCheck = function() {
 			var comment = nicolive.getComment();
 
-			if(comment['message'] === '/failure') {
-				console.log('/failure');
-				clearInterval($.tid);
-				nicolive.close();
-				return;
- 			} if(comment['message'] === '') {
+			if(comment['premium'] === '2' || comment['premium'] === '3') {
+				if(comment['message'] === '/failure') {
+					console.log('/failure');
+					clearInterval($.tid);
+					nicolive.close();
+					return;
+	 			} if(comment['message'].match(/\/disconnect/)) {
+					clearInterval($.tid);
+					nicolive.close();
+					return;
+				}
+			}
+			if(comment['message'] === '') {
  				if (is_cache) {
  					commentUpdate();
  					is_cache = false;
  				}
-				return;
-			} if (comment['message'].match(/\/disconnect/)) {
-				if (comment['premium'] === '2' || comment['premium'] === '3')
-				clearInterval($.tid);
-				nicolive.close();
 				return;
 			}
 			is_cache = true;
@@ -141,6 +120,24 @@
 				striped: false,
 				dataType: 'json'
 			});
+			refreshSwatch = function() {
+				var red = $('#red').slider( "value" ),
+					green = $('#green').slider( "value" ),
+					blue = $('#blue').slider( "value" ),
+					hex = $.hexFromRGB( red, green, blue );
+				$('#swatch').css('background-color', '#' + hex);
+			};
+			$('#red, #green, #blue').slider({
+				orientation: "horizontal",
+				range: "min",
+				max: 255,
+				value: 127,
+				slide: refreshSwatch,
+				change: refreshSwatch
+			});
+			$('#red').slider('value', 255);
+			$('#green').slider('value', 140);
+			$('#blue').slider('value', 60);
 			bDiv = $('.flexigrid .bDiv');
 			$('.hDivBox tr th :eq(1)').css('text-align', 'center');
 			tid = setInterval(commentCheck, 30);

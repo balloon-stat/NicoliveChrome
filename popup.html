@@ -16,7 +16,20 @@
 		<li>設定(S)</li>
 		<li>ヘルプ(H)</li>
 	</ul>
+
 	<div id="comments"></div>
+
+	<div id="naming_dialog">
+		<input type="text" id="naming_text">
+	</div>
+
+	<div id="coloring_dialog">
+		<div id="red"></div>
+		<div id="green"></div>
+		<div id="blue"></div>
+		<div id="swatch" class="ui-widget-content ui-corner-all"></div>
+	</div>
+
 	<ul id="custom_context" class="jeegoocontext cm_default">
 		<li id="user_info" class="icon">
 			<span class="icon disk"></span>
@@ -55,11 +68,13 @@
 			プロフィールページを開く
 		</li>
 	</ul>
+
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 	<script src="../lib/flexigrid-1.1/js/flexigrid.origin.js"></script>
 	<script src="../lib/jeegoocontext/jquery.jeegoocontext.js"></script>
 	<script src="../lib/nico.live.js"></script>
+	<script src="./js/nicolive_chrome.js"></script>
 	<script src="./js/popup.js"></script>
 </body>
 </html>
