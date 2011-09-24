@@ -1,6 +1,10 @@
 PROJECT(CPPBUILD)                                                                                                     
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
+# TODO
+# ひとまずVC++でも動かせるように改善する。
+# Mac,Linux環境でのビルドは成功
+
 INCLUDE(${PROJECT_SOURCE_DIR}/cxx/CMakeLists.txt)
 
 #SET(BOOST_INCLUDE_PATH "/boost" CACHE PATH "Plase set include-path to boost")
