@@ -1,6 +1,8 @@
 SET(BOOST_INCLUDE_PATH "/opt/local/include" CACHE PATH "Plase set include-path to boost")
 SET(BOOST_LINK_PATH "/opt/local/lib" CACHE PATH "Plase set link-path to boost")
- 
+
+FIND_PACKAGE(Boost 1.46 REQUIRED)
+
 IF(WIN32)
 	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_INCLUDE_PATH} ${PROJECT_SOURCE_DIR}/npapisdk/include)
     LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_LINK_PATH})
