@@ -50,11 +50,15 @@
 			}
 			$('#comments').find('tr')
 				.each(function(){
-					$(this).jeegoocontext('custom_context',{
+					$(this).bind('contextmenu', function() {
+						console.log('context select');
+						$(this).addClass('trSelected');
+						$(this).siblings().removeClass('trSelected');
+					})
+					.jeegoocontext('custom_context',{
 						widthOverflowOffset: 0,
 						heightOverflowOffset: 3,
 						onSelect: function(e, target) {
-							// TODO 左クリックを押した時のように色付ける(cssで)
 							// TODO jQuery UI Dialogで小窓のモーダレス
 							console.log(this);
 							console.log(e);
