@@ -1,13 +1,16 @@
 PROJECT(CPPBUILD)                                                                                                     
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
+
+SET(BOOST_INCLUDE_PATH "/boost" CACHE PATH "Plase set include-path to boost")
+SET(BOOST_LINK_PATH "/boost" CACHE PATH "Plase set link-path to boost")
  
 IF(WIN32)
-    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
+	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_INCLUDE_PATH})
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_LINK_PATH})
 ENDIF(WIN32)
 IF(UNIX)
-    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include)
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
+    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${BOOST_INCLUDE_PATH})
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib ${BOOST_LINK_PATH})
 ENDIF(UNIX)
  
 OPTION(MAKE_MODULE "make as module." true)
