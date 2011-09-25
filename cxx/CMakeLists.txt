@@ -1,15 +1,15 @@
-SET(BOOST_INCLUDE_PATH "/opt/local/include" CACHE PATH "Plase set include-path to boost")
-SET(BOOST_LINK_PATH "/opt/local/lib" CACHE PATH "Plase set link-path to boost")
+#SET(BOOST_INCLUDE_PATH "/opt/local/include" CACHE PATH "Plase set include-path to boost")
+#SET(BOOST_LINK_PATH "/opt/local/lib" CACHE PATH "Plase set link-path to boost")
 
 FIND_PACKAGE(Boost 1.46 REQUIRED)
 
 IF(WIN32)
-	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_INCLUDE_PATH} ${PROJECT_SOURCE_DIR}/npapisdk/include)
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} ${BOOST_LINK_PATH})
+	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/npapisdk/include)
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
 ENDIF(WIN32)
 IF(UNIX)
-	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${BOOST_INCLUDE_PATH} ${PROJECT_SOURCE_DIR}/npapisdk/include)
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib ${BOOST_LINK_PATH})
+	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${PROJECT_SOURCE_DIR}/npapisdk/include)
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
 ENDIF(UNIX)
  
 OPTION(MAKE_MODULE "make as module." true)
