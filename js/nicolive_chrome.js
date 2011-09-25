@@ -28,7 +28,7 @@
 						text: 'OK',
 						click: function() {
 							var naming = $(this).find('input:text');
-							console.log($(this).find('input:text').val());
+							console.log(naming.val());
 							naming.val('');
 							$(this).dialog('close');
 						}

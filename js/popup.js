@@ -14,7 +14,7 @@
 							|| current_url.match(/co\d+/),
 				title = decodeURI(current_url).match(/t=.*$/)[0]
 							.slice('t='.length, -1);
-			return [liveid, title];
+			return [liveid[0], title];
 		},
 		commentUpdate = function(comment) {
 			var s_offset;
@@ -105,43 +105,42 @@
 	nicolive = new $.nico.live(live_info[0]);
 
 	nicolive.getPlayerStatusXML(function() {
-		nicolive.connectCommentServer(function() {
-			$('#comments').flexigrid({
-				colModel : [
-					{display: 'No.', name : 'no', width : 25, align: 'center'},
-					{display: 'コメント', name : 'message', width : 580, align: 'left'},
-					{display: 'ユーザー', name : 'user_id', width : 80, align: 'center'},
-					{display: '時刻', name : 'date', width : 40, align: 'center'}
-				],
-				height: '300',
-				resizable: false,
-				nowrap: false,
-				singleSelect: true,
-				striped: false,
-				dataType: 'json'
-			});
-			refreshSwatch = function() {
-				var red = $('#red').slider( "value" ),
-					green = $('#green').slider( "value" ),
-					blue = $('#blue').slider( "value" ),
-					hex = $.hexFromRGB( red, green, blue );
-				$('#swatch').css('background-color', '#' + hex);
-			};
-			$('#red, #green, #blue').slider({
-				orientation: "horizontal",
-				range: "min",
-				max: 255,
-				value: 127,
-				slide: refreshSwatch,
-				change: refreshSwatch
-			});
-			$('#red').slider('value', 255);
-			$('#green').slider('value', 140);
-			$('#blue').slider('value', 60);
-			bDiv = $('.flexigrid .bDiv');
-			$('.hDivBox tr th :eq(1)').css('text-align', 'center');
-			tid = setInterval(commentCheck, 30);
+		nicolive.connectCommentServer();
+		$('#comments').flexigrid({
+			colModel : [
+				{display: 'No.', name : 'no', width : 25, align: 'center'},
+				{display: 'コメント', name : 'message', width : 580, align: 'left'},
+				{display: 'ユーザー', name : 'user_id', width : 80, align: 'center'},
+				{display: '時刻', name : 'date', width : 40, align: 'center'}
+			],
+			height: '300',
+			resizable: false,
+			nowrap: false,
+			singleSelect: true,
+			striped: false,
+			dataType: 'json'
 		});
+		refreshSwatch = function() {
+			var red = $('#red').slider( "value" ),
+				green = $('#green').slider( "value" ),
+				blue = $('#blue').slider( "value" ),
+				hex = $.hexFromRGB( red, green, blue );
+			$('#swatch').css('background-color', '#' + hex);
+		};
+		$('#red, #green, #blue').slider({
+			orientation: "horizontal",
+			range: "min",
+			max: 255,
+			value: 127,
+			slide: refreshSwatch,
+			change: refreshSwatch
+		});
+		$('#red').slider('value', 255);
+		$('#green').slider('value', 140);
+		$('#blue').slider('value', 60);
+		bDiv = $('.flexigrid .bDiv');
+		$('.hDivBox tr th :eq(1)').css('text-align', 'center');
+		tid = setInterval(commentCheck, 30);
 	});
 })();
 

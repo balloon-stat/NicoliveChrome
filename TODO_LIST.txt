@@ -17,7 +17,14 @@
 	コメント人数
 
 情報はIndexedDBに保存
-	基本的にNwhois互換で
+	user(済)
+		id(PK), name, color
+	live(済)
+		id(PK), name, start, cid, caster
+	community(TODO)
+		id(PK), owner  (, name, level, members)
+	chat(2重保存の回避が難しいからTODO)
+		id(PK | autoincriment), no, lid, uid, cid, message, mail, vpos, date, type
 
 機能
 	オートスクロール
