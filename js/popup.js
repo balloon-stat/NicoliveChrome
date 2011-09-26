@@ -60,10 +60,8 @@
 						widthOverflowOffset: 0,
 						heightOverflowOffset: 3,
 						onSelect: function(e, target) {
-							console.log(this);
-							console.log(e);
-							console.log(target);
-							$.contextSelect($(this).attr('id'), target);
+							if(!target) return;
+							contextSelect($(this).attr('id'), $(target));
 						}
 					});
 				})
@@ -72,6 +70,82 @@
 				bDiv.scrollTop(bDiv[0].scrollHeight);
 			}
 			comments = [];
+		},
+		contextSelect = function(context_id, target) {
+			var user_id = target.find('td').eq(2).text();
+			switch(context_id) {
+				case 'user_info':
+					console.log('ユーザー情報');
+					break;
+				case 'naming':
+					console.log('名前をつける');
+					// TODO indexedDBをオプションで同期にできるようにする
+					nicolive.getUserInfo(user_id, function(user_info) {
+						nicolive.indexedDB.getData('user', 'id', user_id, function(data) {
+							if(data['id'] === data['name']) {
+								if(user_info) {
+									$('#naming_text').val(user_info['name']);
+								}
+							}
+							else {
+								$('#naming_text').val(data['name']);
+							}
+							$('#naming_dialog').dialog({
+								modal: true,
+								buttons: [{
+									text: 'OK',
+									click: function() {
+										var naming = $(this).find('input:text');
+										nicolive.indexedDB.updateData('user', 'id', user_id, {
+											name: naming.val()
+										});
+										console.log(user_id + ' の名前を ' + naming.val() + 'に変更しました.');
+										naming.val('');
+										$(this).dialog('close');
+									}
+								}]
+							});
+						});
+					});
+					break;
+				case 'coloring':
+					console.log('色をつける');
+					$('#coloring_dialog').dialog({
+						modal: true,
+						width: 500,
+						buttons: [{
+							text: 'OK',
+							click: function() {
+								var r = $('#red').slider('value'),
+									g = $('#green').slider('value'),
+									b = $('#blue').slider('value'),
+									RGB = '#' + $.hexFromRGB(r, g, b);
+								console.log('R : ' + r + ', G : ' + g + ', B : ' + b);
+								nicolive.indexedDB.updateData('user', 'id', user_id, {
+									color: RGB
+								});
+								console.log(user_id + ' の色を ' + RGB + 'に変更しました.');
+								// TODO スライダーの値を今までの色とできるだけかぶらない色にセットしておく
+								$(this).dialog('close');
+							}
+						}]
+					});
+					break;
+				case 'comment_copy':
+					console.log('コメントをコピー');
+					break;
+				case 'id_copy':
+					console.log('IDをコピー');
+					break;
+				case 'tmp_hide':
+					console.log('一時的に非表示');
+					break;
+				case 'profile_page':
+					console.log('プロフィールページを開く');
+					break;
+				default:
+					return false;
+			}
 		},
 		commentCheck = function() {
 			var comment = nicolive.getComment();
