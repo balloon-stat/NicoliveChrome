@@ -12,3 +12,6 @@ PLEASE READ LICENSE.txt
 https://github.com/nus/CommentViewerForGoogleChrome
 の「コメントビュワー for Google Chrome」を参考に拡張していく予定です。
 
+現在Windowでしか動作しません。
+また、IndexedDBを内部で使用しているので、Chrome14でしか動作しません。
+

@@ -7,6 +7,7 @@
 		comment_id = 0,
 		is_cache = false,
 		comments = [],
+		comment_data = {},
 		is_first = true,
 		getLiveInfo = function() {
 			var current_url = document.URL,
@@ -30,12 +31,14 @@
 						comment['vpos']
 					]
 				});
+				comment_data[comment['no']] = comment;
 				return;
 			}
 
 			s_offset = bDiv[0].scrollHeight - bDiv.scrollTop() - bDiv[0].clientHeight;
 			if (is_first) {
 				is_first = false;
+				console.log(comments);
 				$('#comments').flexAddData({
 					total: 1,
 					page: 1,
@@ -49,10 +52,17 @@
 					rows: comments
 				}, ':last');
 			}
+			comments = [];
 			$('#comments tr')
 				.each(function(){
+					var user_id = $(this).find('td').eq(2),
+						comment_no = $(this).find('td').eq(0).text(),
+						comment_info = comment_data[comment_no];
+					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+						console.log(data);
+						user_id.text(data['name']);
+					});
 					$(this).bind('contextmenu', function() {
-						console.log('context select');
 						$(this).addClass('trSelected');
 						$(this).siblings().removeClass('trSelected');
 					})
@@ -69,42 +79,67 @@
 			if (s_offset === 0) {
 				bDiv.scrollTop(bDiv[0].scrollHeight);
 			}
-			comments = [];
+		},
+		commentViewUpdate = function() {
+			$('#comments tr')
+				.each(function(){
+					var user_id = $(this).find('td').eq(2),
+						comment_no = $(this).find('td').eq(0).text(),
+						comment_info = comment_data[comment_no];
+					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+						user_id.text(data['name']);
+					});
+				})
+			;
 		},
 		contextSelect = function(context_id, target) {
-			var user_id = target.find('td').eq(2).text();
+			var comment_no = target.find('td').eq(0).text(),
+				comment_info = comment_data[Number(comment_no)];
+			console.log(comment_info);
 			switch(context_id) {
 				case 'user_info':
 					console.log('ユーザー情報');
 					break;
 				case 'naming':
+					var $$,
+					user_info = {};
 					console.log('名前をつける');
 					// TODO indexedDBをオプションで同期にできるようにする
-					nicolive.getUserInfo(user_id, function(user_info) {
-						nicolive.indexedDB.getData('user', 'id', user_id, function(data) {
-							if(data['id'] === data['name']) {
-								if(user_info) {
-									$('#naming_text').val(user_info['name']);
+					// TODO 名前をつけた後にもう一回名前をつけようとした時にError
+							// 各行のjQueryオブジェクトのdataにidを入れておく
+					if(comment_info['anonymity'] === '0') {
+						console.log('not 184');
+						$$ = $(nicolive.getUserInfo(comment_info['user_id']).responseText);
+						user_info['name'] = $$.find('strong').text();
+						console.log(user_info);
+					}
+					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+						if(data['id'] === data['name']) {
+							if(user_info) {
+								$('#naming_text').val(user_info['name']);
+							}
+						} else {
+							$('#naming_text').val(data['name']);
+						}
+						$('#naming_dialog').dialog({
+							modal: true,
+							buttons: [{
+								text: 'OK',
+								click: function() {
+									var naming = $(this).find('input:text');
+									nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
+										name: naming.val()
+									});
+									console.log(comment_info['user_id'] + ' の名前を ' + naming.val() + 'に変更しました.');
+									// gettest
+									nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(d) {
+										console.log(d);
+									});
+									commentViewUpdate();
+									naming.val('');
+									$(this).dialog('close');
 								}
-							}
-							else {
-								$('#naming_text').val(data['name']);
-							}
-							$('#naming_dialog').dialog({
-								modal: true,
-								buttons: [{
-									text: 'OK',
-									click: function() {
-										var naming = $(this).find('input:text');
-										nicolive.indexedDB.updateData('user', 'id', user_id, {
-											name: naming.val()
-										});
-										console.log(user_id + ' の名前を ' + naming.val() + 'に変更しました.');
-										naming.val('');
-										$(this).dialog('close');
-									}
-								}]
-							});
+							}]
 						});
 					});
 					break;
@@ -125,6 +160,8 @@
 									color: RGB
 								});
 								console.log(user_id + ' の色を ' + RGB + 'に変更しました.');
+								// TODO 過去コメントを更新
+								commentViewUpdate();
 								// TODO スライダーの値を今までの色とできるだけかぶらない色にセットしておく
 								$(this).dialog('close');
 							}
@@ -150,6 +187,16 @@
 		commentCheck = function() {
 			var comment = nicolive.getComment();
 
+			if(!comment['message']) {
+ 				if (is_cache) {
+	 				try {
+ 						commentUpdate();
+ 					} finally {
+	 					is_cache = false;
+	 				}
+ 				}
+				return;
+			}
 			if(comment['premium'] === '2' || comment['premium'] === '3') {
 				if(comment['message'] === '/failure') {
 					console.log('/failure');
@@ -161,13 +208,6 @@
 					nicolive.close();
 					return;
 				}
-			}
-			if(comment['message'] === '') {
- 				if (is_cache) {
- 					commentUpdate();
- 					is_cache = false;
- 				}
-				return;
 			}
 			is_cache = true;
 			commentUpdate(comment);
@@ -183,7 +223,7 @@
 		$('#comments').flexigrid({
 			colModel : [
 				{display: 'No.', name : 'no', width : 25, align: 'center'},
-				{display: 'コメント', name : 'message', width : 580, align: 'left'},
+				{display: 'コメント', name : 'message', width : 520, align: 'left'},
 				{display: 'ユーザー', name : 'user_id', width : 80, align: 'center'},
 				{display: '時刻', name : 'date', width : 40, align: 'center'}
 			],
