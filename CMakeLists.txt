@@ -5,6 +5,15 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 # ひとまずVC++でも動かせるように改善する。
 # Mac,Linux環境でのビルドは成功
 
+#winでビルドできない問題を解決するため内蔵してるboostを利用します。後々削除される可能性が高いです。
+
+OPTION(USE_INTERNAL_BOOST "CMake will use boost that is built into repo." OFF)
+
+IF(UNIX AND USE_INTERNAL_BOOST)
+	MESSAGE(FATAL_ERRO "USE_INTERNAL_BOOST Option can not be used on UNIX.")
+ENDIF()
+
+
 INCLUDE(${PROJECT_SOURCE_DIR}/cxx/CMakeLists.txt)
 
 #SET(BOOST_INCLUDE_PATH "/boost" CACHE PATH "Plase set include-path to boost")
@@ -19,7 +28,7 @@ INCLUDE(${PROJECT_SOURCE_DIR}/cxx/CMakeLists.txt)
 #    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib ${BOOST_LINK_PATH})
 #ENDIF(UNIX)
  
-#OPTION(MAKE_MODULE "make as module." true)
+#OPTION(MAKE_MODULRO"make as module." true)
 #OPTION(MAKE_SHARED "make as shared" false)
 #OPTION(MAKE_STATIC "make as static" false)
  

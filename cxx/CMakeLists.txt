@@ -1,27 +1,39 @@
 #SET(BOOST_INCLUDE_PATH "/opt/local/include" CACHE PATH "Plase set include-path to boost")
 #SET(BOOST_LINK_PATH "/opt/local/lib" CACHE PATH "Plase set link-path to boost")
 
-FIND_PACKAGE(Boost 1.46 REQUIRED)
-
-IF(WIN32)
-	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/npapisdk/include)
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
-ENDIF(WIN32)
-IF(UNIX)
-	INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${PROJECT_SOURCE_DIR}/npapisdk/include)
-    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
-ENDIF(UNIX)
- 
 OPTION(MAKE_MODULE "make as module." true)
 OPTION(MAKE_SHARED "make as shared" false)
 OPTION(MAKE_STATIC "make as static" false)
- 
+
 SET(OUTPUT_FILENAME "NiconamaClient" CACHE STRING "Please set output filename.")
  
 SET(INFO_OUTFILE_NAME "niconamaclient" CACHE STRING "niconamaclient.cc build")
+
+IF(NOT USE_INTERNAL_BOOST)
+	FIND_PACKAGE(Boost 1.46 REQUIRED)
+	
+	IF(WIN32)
+		INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/npapisdk/include)
+        LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
+	ENDIF(WIN32)
+	IF(UNIX)
+		INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${PROJECT_SOURCE_DIR}/npapisdk/include)
+	    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
+	ENDIF(UNIX)
  
+ELSE()
+	IF(WIN32)
+		INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/npapisdk/include ${PROJECT_SOURCE_DIR}/cxx/boost/win/include)
+		LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/cxx/boost/win/lib)
+	ENDIF(WIN32)
+	IF(UNIX)
+		INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/local/include ${PROJECT_SOURCE_DIR}/npapisdk/include)
+	    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/lib /usr/lib)
+	ENDIF(UNIX)
+	
+ENDIF(NOT USE_INTERNAL_BOOST)
 IF(MAKE_STATIC)
-    ADD_LIBRARY(${OUTPUT_FILENAME} STATIC ${PROJECT_SOURCE_DIR}/cxx/NiconamaClient.cpp)
+	ADD_LIBRARY(${OUTPUT_FILENAME} STATIC ${PROJECT_SOURCE_DIR}/cxx/NiconamaClient.cpp)
     ADD_LIBRARY(${niconamaclient} STATIC ${PROJECT_SOURCE_DIR}/cxx/niconamaclient.cc)
 ELSEIF(MAKE_SHARED)
     ADD_LIBRARY(${OUTPUT_FILENAME} SHARED ${PROJECT_SOURCE_DIR}/cxx/NiconamaClient.cpp)
