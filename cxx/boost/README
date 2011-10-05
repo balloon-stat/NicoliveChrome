@@ -1,0 +1,22 @@
+内蔵boostを利用する場合こちらにあるtarballを展開してください。
+このディレクトリには "win" が配置されるようにしてください。
+プロジェクトのrootディレクトリからの相対PATHで
+
+cxx/boost/win/include
+
+と
+
+cxx/boost/win/lib
+
+が存在するようにしてください。
+
+ちなみにいまは
+
+cxx/boost
+
+以下です。win.tar.xzは
+
+cxx/boost/win.tar.xz
+
+です。
+
