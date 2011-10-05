@@ -6,11 +6,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 # Mac,Linux環境でのビルドは成功
 
 #winでビルドできない問題を解決するため内蔵してるboostを利用します。後々削除される可能性が高いです。
-
+#また、このオプションを利用する場合、cxx/boost/以下にあるwin.tar.xzを適切に展開しておく必要があります。
 OPTION(USE_INTERNAL_BOOST "CMake will use boost that is built into repo." OFF)
 
 IF(UNIX AND USE_INTERNAL_BOOST)
 	MESSAGE(FATAL_ERRO "USE_INTERNAL_BOOST Option can not be used on UNIX.")
+ENDIF()
+IF(USE_INTERNAL_BOOST)
+	MESSAGE(WARNING "Have you finished to decompress win.tar.xz tarball yet?") #英語が間違えてる気しかしない
 ENDIF()
 
 
