@@ -1,4 +1,6 @@
-内蔵boostを利用する場合こちらにあるtarballを展開してください。
+[windowsに於いて内蔵boostを利用する場合以下の作業をしてください]
+
+内蔵boostを利用する場合 まずこちらにあるtarballを展開してください。
 このディレクトリには "win" が配置されるようにしてください。
 プロジェクトのrootディレクトリからの相対PATHで
 
@@ -19,4 +21,27 @@ cxx/boost
 cxx/boost/win.tar.xz
 
 です。
+
+*tarballはtarとxzを用いてソリッド圧縮しています。xzを展開できない場合は
+http://tukaani.org/xz/
+よりxzをDLしてください。tarを利用できない場合は
+http://ftp.jaist.ac.jp/pub/GNU/tar
+を利用することができます。
+(もちろんそれ以外に対応してる圧縮解凍ツールを用いても構いません)
+
+またlibarchive (bsdtarコマンドなど) をwin向けにビルド致しましたのでそちらを利用しても大丈夫です
+http://d.hatena.ne.jp/opamp_sando/20110801/1312178746
+(http://www1.axfc.net/uploader/He/so/334187)
+こちらを利用した場合cmdなどからこのディレクトリに移動し
+
+bsdtar xfvJ win.tar.xz
+
+で展開できます。bsdtarはコマンド名です(PATHを通しておく必要があります)。
+
+
+展開が終わったら準備完了です。
+あとはCMakeを走らせるときUSE_INTERNAL_BOOSTオプションをTRUEにしてください。
+windows用のバイナリのみ内蔵してるのでwin(win32)以外で実行するとエラーになるようになってます。
+
+cmakeをコマンドラインから利用する場合 -L でオプションを確認できます。 -D でオプションを指定してください。
 
