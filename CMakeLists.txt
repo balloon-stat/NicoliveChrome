@@ -1,5 +1,5 @@
 PROJECT(CPPBUILD)                                                                                                     
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
 
 # TODO
 # ひとまずVC++でも動かせるように改善する。
