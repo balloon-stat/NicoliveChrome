@@ -16,6 +16,13 @@ IF(USE_INTERNAL_BOOST)
 	MESSAGE(WARNING "Have you finished to decompress win.tar.xz tarball yet?") #英語が間違えてる気しかしない
 ENDIF()
 
+IF(MINGW)
+	SET(P_MINGW TRUE)
+ELSEIF()
+	SET(P_MINGW FALSE)
+ENDIF(MINGW)
+
+CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/cxx/config.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/config.hpp)
 
 INCLUDE(${PROJECT_SOURCE_DIR}/cxx/CMakeLists.txt)
 

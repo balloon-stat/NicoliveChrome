@@ -34,6 +34,10 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
+#include<config.hpp>
+#ifdef P_MINGW
+#include<inttypes.h>
+#endif
 
 #ifndef npapi_h_
 #define npapi_h_
