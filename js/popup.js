@@ -12,9 +12,9 @@
 		getLiveInfo = function() {
 			var current_url = document.URL,
 				liveid = current_url.match(/lv\d+/)
-							|| current_url.match(/co\d+/),
+						|| current_url.match(/co\d+/),
 				title = decodeURI(current_url).match(/t=.*$/)[0]
-							.slice('t='.length, -1);
+						.slice('t='.length, -1);
 			return [liveid[0], title];
 		},
 		commentUpdate = function(comment) {
@@ -55,18 +55,21 @@
 			comments = [];
 			$('#comments tr')
 				.each(function(){
-					var user_id = $(this).find('td').eq(2),
+					var $$ = $(this),
+						user_id = $(this).find('td').eq(2),
 						comment_no = $(this).find('td').eq(0).text(),
 						comment_info = comment_data[comment_no];
 					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
-						console.log(data);
-						user_id.text(data['name']);
+						user_id.find('div').text(data['name']);
+						$$.css('background-color', data['color']);
 					});
-					$(this).bind('contextmenu', function() {
-						$(this).addClass('trSelected');
+					console.log($(this));
+					$(this)
+					.unbind('contextmenu')
+					.bind('contextmenu', function() {
 						$(this).siblings().removeClass('trSelected');
-					})
-					.jeegoocontext('custom_context',{
+						$(this).toggleClass('trSelected');
+					}).jeegoocontext('custom_context',{
 						widthOverflowOffset: 0,
 						heightOverflowOffset: 3,
 						onSelect: function(e, target) {
@@ -82,12 +85,14 @@
 		},
 		commentViewUpdate = function() {
 			$('#comments tr')
-				.each(function(){
-					var user_id = $(this).find('td').eq(2),
+				.each(function() {
+					var $$ = $(this),
+						user_id = $(this).find('td').eq(2),
 						comment_no = $(this).find('td').eq(0).text(),
 						comment_info = comment_data[comment_no];
 					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
-						user_id.text(data['name']);
+						user_id.find('div').text(data['name']);
+						$$.css('background-color', data['color']);
 					});
 				})
 			;
@@ -104,9 +109,6 @@
 					var $$,
 					user_info = {};
 					console.log('名前をつける');
-					// TODO indexedDBをオプションで同期にできるようにする
-					// TODO 名前をつけた後にもう一回名前をつけようとした時にError
-							// 各行のjQueryオブジェクトのdataにidを入れておく
 					if(comment_info['anonymity'] === '0') {
 						console.log('not 184');
 						$$ = $(nicolive.getUserInfo(comment_info['user_id']).responseText);
@@ -131,10 +133,6 @@
 										name: naming.val()
 									});
 									console.log(comment_info['user_id'] + ' の名前を ' + naming.val() + 'に変更しました.');
-									// gettest
-									nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(d) {
-										console.log(d);
-									});
 									commentViewUpdate();
 									naming.val('');
 									$(this).dialog('close');
@@ -156,10 +154,10 @@
 									b = $('#blue').slider('value'),
 									RGB = '#' + $.hexFromRGB(r, g, b);
 								console.log('R : ' + r + ', G : ' + g + ', B : ' + b);
-								nicolive.indexedDB.updateData('user', 'id', user_id, {
+								nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
 									color: RGB
 								});
-								console.log(user_id + ' の色を ' + RGB + 'に変更しました.');
+								console.log(comment_info['user_id'] + ' の色を ' + RGB + 'に変更しました.');
 								// TODO 過去コメントを更新
 								commentViewUpdate();
 								// TODO スライダーの値を今までの色とできるだけかぶらない色にセットしておく
