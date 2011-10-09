@@ -2,6 +2,7 @@
 	"name": "ニコ生クローム",
 	"version": "0.1.0",
 	"description": "ニコ生のChrome用アドオンです。コメビュやアラーム機能を提供します。",
+	"update_url": "http://kokudori.github.com/NicoliveChrome/updates.xml",
 	"background_page": "back-ground.html",
 	"browser_action": {
 		"default_icon": "img/icon19.png"
