@@ -1,10 +1,8 @@
 (function() {
 	var nicolive,
 		live_info,
-		tid,
 		bDiv,
 		refreshSwatch,
-		comment_id = 0,
 		is_cache = false,
 		comments = [],
 		comment_data = {},
@@ -19,11 +17,10 @@
 		},
 		commentUpdate = function(comment) {
 			var s_offset;
-
 			if (comment) {
-				comment_id++;
+				comment_data[comment['no']] = comment;
 				comments.push({
-					id: comment_id,
+					id: comment_data.length,
 					cell: [
 						comment['no'],
 						comment['message'],
@@ -31,14 +28,12 @@
 						comment['vpos']
 					]
 				});
-				comment_data[comment['no']] = comment;
 				return;
 			}
 
 			s_offset = bDiv[0].scrollHeight - bDiv.scrollTop() - bDiv[0].clientHeight;
 			if (is_first) {
 				is_first = false;
-				console.log(comments);
 				$('#comments').flexAddData({
 					total: 1,
 					page: 1,
@@ -53,71 +48,58 @@
 				}, ':last');
 			}
 			comments = [];
-			$('#comments tr')
-				.each(function(){
-					var $$ = $(this),
-						user_id = $(this).find('td').eq(2),
-						comment_no = $(this).find('td').eq(0).text(),
-						comment_info = comment_data[comment_no];
-					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
-						user_id.find('div').text(data['name']);
-						$$.css('background-color', data['color']);
-					});
-					console.log($(this));
-					$(this)
-					.unbind('contextmenu')
-					.bind('contextmenu', function() {
-						$(this).siblings().removeClass('trSelected');
-						$(this).toggleClass('trSelected');
-					}).jeegoocontext('custom_context',{
-						widthOverflowOffset: 0,
-						heightOverflowOffset: 3,
-						onSelect: function(e, target) {
-							if(!target) return;
-							contextSelect($(this).attr('id'), $(target));
-						}
-					});
-				})
-			;
+			commentViewUpdateAll(function(elem) {
+				$(elem).jeegoocontext('custom_context',{
+					widthOverflowOffset: 0,
+					heightOverflowOffset: 3,
+					onSelect: function(e, target) {
+						if(!target) return;
+						var type = $(this).attr('id');
+						contextSelect(type, $(target));
+					}
+				});
+			});
 			if (s_offset === 0) {
 				bDiv.scrollTop(bDiv[0].scrollHeight);
 			}
 		},
-		commentViewUpdate = function() {
+		commentViewUpdate = function(row) {
+			var $$ = $(row),
+				user_id = $$.find('td').eq(2),
+				comment_no = $$.find('td').eq(0).text(),
+				comment_info = comment_data[comment_no];
+				console.log(comment_info);
+			nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+				user_id.find('div').text(data['name']);
+				$$.css('background-color', data['color']);
+			});
+		},
+		commentViewUpdateAll = function(callback) {
+			var that = this;
 			$('#comments tr')
 				.each(function() {
-					var $$ = $(this),
-						user_id = $(this).find('td').eq(2),
-						comment_no = $(this).find('td').eq(0).text(),
-						comment_info = comment_data[comment_no];
-					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
-						user_id.find('div').text(data['name']);
-						$$.css('background-color', data['color']);
-					});
+					commentViewUpdate(this);
+					if(!!callback) callback.call(that, this);
 				})
 			;
 		},
-		contextSelect = function(context_id, target) {
-			var comment_no = target.find('td').eq(0).text(),
-				comment_info = comment_data[Number(comment_no)];
-			console.log(comment_info);
-			switch(context_id) {
+		contextSelect = function(type, target) {
+			var no = target.find('td').eq(0).text(),
+				comment_info = comment_data[no];
+			switch(type) {
 				case 'user_info':
-					console.log('ユーザー情報');
+					console.log('user info show');
 					break;
 				case 'naming':
-					var $$,
-					user_info = {};
-					console.log('名前をつける');
-					if(comment_info['anonymity'] === '0') {
-						console.log('not 184');
-						$$ = $(nicolive.getUserInfo(comment_info['user_id']).responseText);
-						user_info['name'] = $$.find('strong').text();
-						console.log(user_info);
-					}
+					var user_info = {};
+					console.log('naming');
 					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+						if(comment_info['anonymity'] === '0') {
+							var info = $($.nico.getUserInfo(comment_info['user_id']).responseText);
+							user_info['name'] = info.find('strong').text();
+						}
 						if(data['id'] === data['name']) {
-							if(user_info) {
+							if(user_info['name']) {
 								$('#naming_text').val(user_info['name']);
 							}
 						} else {
@@ -132,8 +114,8 @@
 									nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
 										name: naming.val()
 									});
-									console.log(comment_info['user_id'] + ' の名前を ' + naming.val() + 'に変更しました.');
-									commentViewUpdate();
+									//console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
+									commentViewUpdateAll();
 									naming.val('');
 									$(this).dialog('close');
 								}
@@ -142,7 +124,7 @@
 					});
 					break;
 				case 'coloring':
-					console.log('色をつける');
+					console.log('coloring');
 					$('#coloring_dialog').dialog({
 						modal: true,
 						width: 500,
@@ -157,26 +139,26 @@
 								nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
 									color: RGB
 								});
-								console.log(comment_info['user_id'] + ' の色を ' + RGB + 'に変更しました.');
+								console.log(comment_info['user_id'] + ' の色�?' + RGB + 'に変更しました.');
 								// TODO 過去コメントを更新
-								commentViewUpdate();
-								// TODO スライダーの値を今までの色とできるだけかぶらない色にセットしておく
+								commentViewUpdateAll();
+								// TODO スライ�??の値を今までの色とできる�?��か�?らな�?��にセ�?��しておく
 								$(this).dialog('close');
 							}
 						}]
 					});
 					break;
 				case 'comment_copy':
-					console.log('コメントをコピー');
+					console.log('comment copy');
 					break;
 				case 'id_copy':
-					console.log('IDをコピー');
+					console.log('ID copy');
 					break;
 				case 'tmp_hide':
-					console.log('一時的に非表示');
+					console.log('tmpolally hide');
 					break;
 				case 'profile_page':
-					console.log('プロフィールページを開く');
+					console.log('profile page jamp');
 					break;
 				default:
 					return false;
@@ -201,17 +183,12 @@
 					clearInterval($.tid);
 					nicolive.close();
 					return;
-	 			} if(comment['message'].match(/\/disconnect/)) {
-					clearInterval($.tid);
-					nicolive.close();
-					return;
-				}
+	 			}
 			}
 			is_cache = true;
 			commentUpdate(comment);
 		};
 
-	// 以下初期化処理
 	live_info = getLiveInfo();
 	document.title = live_info[1];
 	nicolive = new $.nico.live(live_info[0]);
@@ -221,7 +198,7 @@
 		$('#comments').flexigrid({
 			colModel : [
 				{display: 'No.', name : 'no', width : 25, align: 'center'},
-				{display: 'コメント', name : 'message', width : 520, align: 'left'},
+				{display: '名前', name : 'message', width : 520, align: 'left'},
 				{display: 'ユーザー', name : 'user_id', width : 80, align: 'center'},
 				{display: '時刻', name : 'date', width : 40, align: 'center'}
 			],
@@ -252,7 +229,7 @@
 		$('#blue').slider('value', 60);
 		bDiv = $('.flexigrid .bDiv');
 		$('.hDivBox tr th :eq(1)').css('text-align', 'center');
-		tid = setInterval(commentCheck, 30);
+		$.tid = setInterval(commentCheck, 30);
 	});
 })();
 

@@ -1,4 +1,9 @@
 (function($) {
+	$.fn.tap = function(func, that) {
+		var that = that || this;
+		func.call(that, this);
+		return this;
+	};
 	$.escapeHTML = function(val) {
 		return $('<div/>').text(val).html();
 	};
