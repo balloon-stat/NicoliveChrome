@@ -9,6 +9,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
 #また、このオプションを利用する場合、cxx/boost/以下にあるwin.tar.xzを適切に展開しておく必要があります。
 OPTION(USE_INTERNAL_BOOST "CMake will use boost that is built into repo." OFF)
 
+#FIND_PACKAGE(Boost 1.47.0 REQUIRED) #一応boostを探すcmakeのコマンドを追加 コメント解除すれば動くように...
+
 IF(NOT MINGW AND USE_INTERNAL_BOOST)
 	MESSAGE(FATAL_ERRO "USE_INTERNAL_BOOST Option can not be used on UNIX.")
 ENDIF()
