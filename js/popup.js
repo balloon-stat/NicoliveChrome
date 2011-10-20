@@ -68,7 +68,6 @@
 				user_id = $$.find('td').eq(2),
 				comment_no = $$.find('td').eq(0).text(),
 				comment_info = comment_data[comment_no];
-				console.log(comment_info);
 			nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
 				user_id.find('div').text(data['name']);
 				$$.css('background-color', data['color']);
@@ -115,9 +114,11 @@
 		setNamig = function(comment_info) {
 			var user_info = {};
 			nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+				var user_info;
 				if(comment_info['anonymity'] === '0') {
-					var info = $($.nico.getUserInfo(comment_info['user_id']).responseText);
-					user_info['name'] = info.find('strong').text();
+					$.nico.getUserInfo(comment_info['user_id'], function(info) {
+						user_info = info;
+					}, false)
 				}
 				if(data['id'] === data['name']) {
 					if(user_info['name']) {
@@ -135,7 +136,7 @@
 							nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
 								name: naming.val()
 							});
-							//console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
+							console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
 							commentViewUpdateAll();
 							naming.val('');
 							$(this).dialog('close');
@@ -156,7 +157,7 @@
 							b = $('#blue').slider('value'),
 							RGB = '#' + $.hexFromRGB(r, g, b);
 						console.log('R : ' + r + ', G : ' + g + ', B : ' + b);
-						nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
+						nicolive.indexedDB.updateData('user', 'id', user_id, {
 							color: RGB
 						});
 						console.log(user_id + ' の色�?' + RGB + 'に変更しました.');
@@ -168,11 +169,9 @@
 			});
 		}
 		userCommentHide = function(user_id) {
-			console.log(user_id);
 			commentViewUpdateAll(function(elem) {
-				var id = $(elem).find('td').eq(2).children('div').text();
-				console.log(id);
-				if(user_id === id) {
+				var no = $(elem).find('td').eq(0).children('div').text();
+				if(user_id === comment_data[no]['user_id']) {
 					var comment = $(elem).find('td').eq(1).children('div');
 					if(comment.data('cache')) {
 						comment.text(comment.data('cache'));
@@ -186,7 +185,6 @@
 		},
 		commentCheck = function() {
 			var comment = nicolive.getComment();
-
 			if(!comment['message']) {
  				if (is_cache) {
 	 				try {
@@ -214,7 +212,7 @@
 	nicolive = new $.nico.live(live_info[0]);
 	window.onbeforeunload = function() {
 		nicolive.close();
-	}
+	};
 
 	nicolive.getPlayerStatusXML(function() {
 		nicolive.connectCommentServer();
