@@ -88,81 +88,101 @@
 				comment_info = comment_data[no];
 			switch(type) {
 				case 'user_info':
-					console.log('user info show');
+					openUserWindow(comment_info['user_id']);
 					break;
 				case 'naming':
-					var user_info = {};
-					console.log('naming');
-					nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
-						if(comment_info['anonymity'] === '0') {
-							var info = $($.nico.getUserInfo(comment_info['user_id']).responseText);
-							user_info['name'] = info.find('strong').text();
-						}
-						if(data['id'] === data['name']) {
-							if(user_info['name']) {
-								$('#naming_text').val(user_info['name']);
-							}
-						} else {
-							$('#naming_text').val(data['name']);
-						}
-						$('#naming_dialog').dialog({
-							modal: true,
-							buttons: [{
-								text: 'OK',
-								click: function() {
-									var naming = $(this).find('input:text');
-									nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
-										name: naming.val()
-									});
-									//console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
-									commentViewUpdateAll();
-									naming.val('');
-									$(this).dialog('close');
-								}
-							}]
-						});
-					});
+					setNamig(comment_info);
 					break;
 				case 'coloring':
-					console.log('coloring');
-					$('#coloring_dialog').dialog({
-						modal: true,
-						width: 500,
-						buttons: [{
-							text: 'OK',
-							click: function() {
-								var r = $('#red').slider('value'),
-									g = $('#green').slider('value'),
-									b = $('#blue').slider('value'),
-									RGB = '#' + $.hexFromRGB(r, g, b);
-								console.log('R : ' + r + ', G : ' + g + ', B : ' + b);
-								nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
-									color: RGB
-								});
-								console.log(comment_info['user_id'] + ' の色�?' + RGB + 'に変更しました.');
-								// TODO 過去コメントを更新
-								commentViewUpdateAll();
-								// TODO スライ�??の値を今までの色とできる�?��か�?らな�?��にセ�?��しておく
-								$(this).dialog('close');
-							}
-						}]
-					});
-					break;
-				case 'comment_copy':
-					console.log('comment copy');
-					break;
-				case 'id_copy':
-					console.log('ID copy');
+					setColoring(comment_info['user_id']);
 					break;
 				case 'tmp_hide':
-					console.log('tmpolally hide');
+					userCommentHide(comment_info['user_id']);
 					break;
 				case 'profile_page':
-					console.log('profile page jamp');
+					nicolive.jumpUserProfile(comment_info['user_id']);
 					break;
 				default:
 					return false;
 			}
+		},
+		openUserWindow = function(user_id) {
+			// TODO 過去コメント一覧表示をどうするか
+			// 名前、ID、サムネ、ユーザー色
+			window.open('../w_user_info.html?user_id=' + user_id,
+					'user_window', 'status=-1, height=360, width=350');
+		},
+		setNamig = function(comment_info) {
+			var user_info = {};
+			nicolive.indexedDB.getData('user', 'id', comment_info['user_id'], function(data) {
+				if(comment_info['anonymity'] === '0') {
+					var info = $($.nico.getUserInfo(comment_info['user_id']).responseText);
+					user_info['name'] = info.find('strong').text();
+				}
+				if(data['id'] === data['name']) {
+					if(user_info['name']) {
+						$('#naming_text').val(user_info['name']);
+					}
+				} else {
+					$('#naming_text').val(data['name']);
+				}
+				$('#naming_dialog').dialog({
+					modal: true,
+					buttons: [{
+						text: 'OK',
+						click: function() {
+							var naming = $(this).find('input:text');
+							nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
+								name: naming.val()
+							});
+							//console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
+							commentViewUpdateAll();
+							naming.val('');
+							$(this).dialog('close');
+						}
+					}]
+				});
+			});
+		},
+		setColoring = function(user_id) {
+			$('#coloring_dialog').dialog({
+				modal: true,
+				width: 500,
+				buttons: [{
+					text: 'OK',
+					click: function() {
+						var r = $('#red').slider('value'),
+							g = $('#green').slider('value'),
+							b = $('#blue').slider('value'),
+							RGB = '#' + $.hexFromRGB(r, g, b);
+						console.log('R : ' + r + ', G : ' + g + ', B : ' + b);
+						nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
+							color: RGB
+						});
+						console.log(user_id + ' の色�?' + RGB + 'に変更しました.');
+						commentViewUpdateAll();
+						// TODO スライ�??の値を今までの色とできる�?��か�?らな�?��にセ�?��しておく
+						$(this).dialog('close');
+					}
+				}]
+			});
+		}
+		userCommentHide = function(user_id) {
+			console.log(user_id);
+			commentViewUpdateAll(function(elem) {
+				var id = $(elem).find('td').eq(2).children('div').text();
+				console.log(id);
+				if(user_id === id) {
+					var comment = $(elem).find('td').eq(1).children('div');
+					if(comment.data('cache')) {
+						comment.text(comment.data('cache'));
+						comment.data('cache', null);
+					} else {
+						comment.data('cache', comment.text());
+						comment.text('非表示です');
+					}
+				}
+			});
 		},
 		commentCheck = function() {
 			var comment = nicolive.getComment();
@@ -192,6 +212,9 @@
 	live_info = getLiveInfo();
 	document.title = live_info[1];
 	nicolive = new $.nico.live(live_info[0]);
+	window.onbeforeunload = function() {
+		nicolive.close();
+	}
 
 	nicolive.getPlayerStatusXML(function() {
 		nicolive.connectCommentServer();
