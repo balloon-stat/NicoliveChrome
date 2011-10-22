@@ -1,8 +1,8 @@
 #SET(BOOST_INCLUDE_PATH "/opt/local/include" CACHE PATH "Plase set include-path to boost")
 #SET(BOOST_LINK_PATH "/opt/local/lib" CACHE PATH "Plase set link-path to boost")
 
-OPTION(MAKE_MODULE "make as module." true)
-OPTION(MAKE_SHARED "make as shared" false)
+OPTION(MAKE_MODULE "make as module." false)
+OPTION(MAKE_SHARED "make as shared" true)
 OPTION(MAKE_STATIC "make as static" false)
 
 SET(OUTPUT_FILENAME "NiconamaClient" CACHE STRING "Please set output filename.")
