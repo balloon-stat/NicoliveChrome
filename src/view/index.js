@@ -136,7 +136,7 @@
 							nicolive.indexedDB.updateData('user', 'id', comment_info['user_id'], {
 								name: naming.val()
 							});
-							console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
+							console.log(comment_info['user_id'] + ' の名前�?' + naming.val() + 'に変更しました.');
 							commentViewUpdateAll();
 							naming.val('');
 							$(this).dialog('close');
@@ -160,9 +160,9 @@
 						nicolive.indexedDB.updateData('user', 'id', user_id, {
 							color: RGB
 						});
-						console.log(user_id + ' の色�?' + RGB + 'に変更しました.');
+						console.log(user_id + ' の色�?' + RGB + 'に変更しました.');
 						commentViewUpdateAll();
-						// TODO スライ�??の値を今までの色とできる�?��か�?らな�?��にセ�?��しておく
+						// TODO スライ�??の値を今までの色とできる�?��か�?らな�?��にセ�?��しておく
 						$(this).dialog('close');
 					}
 				}]

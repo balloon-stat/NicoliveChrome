@@ -8,7 +8,7 @@ $.nlcm.error.CommentError = class
 $.nlcm.Comment = class
 	constructor: (@nc) ->
 
-	connectCommentServer: ->
+	connectCommentServer: (@server) ->
 		@nc.connect(@server['addr'], @server['port'])
 		@nc.requestComment(@server['thread'], '500')
 
