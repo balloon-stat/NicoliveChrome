@@ -26,7 +26,7 @@
       request.onsuccess = __bind(function(event) {
         this.db = request.result;
         if (this.db.version !== version) {
-          this.createObjectStore(version);
+          createObjectStore(version);
         }
         return console.log("DBの通信に成功しました. dbname : " + dbname);
       }, this);

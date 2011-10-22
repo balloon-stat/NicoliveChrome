@@ -16,7 +16,7 @@ $.nlcm.DB = class
 		request = indexedDB.open(dbname)
 		request.onsuccess = (event) =>
 			@db = request.result
-			@createObjectStore(version) unless @db.version is version
+			createObjectStore(version) unless @db.version is version
 			console.log "DBの通信に成功しました. dbname : #{dbname}"
 		request.onerror = (event) ->
 			throw new Error("DBの通信に失敗しました. dbname : #{dbname}")
