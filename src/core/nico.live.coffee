@@ -73,7 +73,7 @@ $.nlcm.Live = class
 
 	readComment: (callback) ->
 		comment = @comment.getComment()
-		callback(comment)
+		callback(comment) if comment.length > 0
 
 	stopComment: ->
 		clearInterval(tid)

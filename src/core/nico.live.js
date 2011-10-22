@@ -78,7 +78,9 @@
     _Class.prototype.readComment = function(callback) {
       var comment;
       comment = this.comment.getComment();
-      return callback(comment);
+      if (comment.length > 0) {
+        return callback(comment);
+      }
     };
     _Class.prototype.stopComment = function() {
       return clearInterval(tid);
