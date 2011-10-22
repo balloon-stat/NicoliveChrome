@@ -1,0 +1,3 @@
+(function() {
+  $.nlcm = {};
+}).call(this);

@@ -12,6 +12,7 @@
 			return;
 		}
 		var lvId = getNicoLiveId(tab.url.toString());
-		window.open('popup.html?' + lvId + '&t=' + tab.title, 'mywindow','status=-1, height=360, width=750');
+		window.open('./view/index.html?' + lvId + '&t=' + tab.title,
+								'mywindow','status=-1, height=360, width=750');
 	});
 })();
