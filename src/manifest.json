@@ -1,0 +1,23 @@
+{
+	"name": "ニコ生クローム",
+	"version": "0.2.0",
+	"description": "ニコ生のChrome用アドオンです。コメビュやアラーム機能を提供します。",
+	"update_url": "http://kokudori.github.com/NicoliveChrome/updates.xml",
+	"background_page": "back-ground.html",
+	"browser_action": {
+		"default_icon": "img/icon19.png"
+	},
+	"icons": {
+		"128": "img/icon128.png",
+		"16": "img/icon16.png",
+		"48": "img/icon48.png"
+	},
+	"plugins": [
+		{"path": "lib/NicoClientPlugin.dll"}
+	],
+	"permissions": [
+		"http://watch.live.nicovideo.jp/",
+		"http://live.nicovideo.jp/watch/",
+		"http://www.nicovideo.jp/user/"
+	]
+}

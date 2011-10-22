@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" type="text/css" media="all">
+	<link rel="stylesheet" href="../lib/flexigrid-1.1/css/flexigrid.origin.css" type="text/css" media="all">
+	<link rel="stylesheet" href="../lib/jeegoocontext/skins/cm_default/style.css" type="text/css" media="all">
+	<link rel="stylesheet" href="../css/popup.css" type="text/css" media="all">
+</head>
+<body>
+	<object type="application/x-winniconamaclient" id="plugin" width="0" height="0"></object>
+	<ul id="menu">
+		<li>ファイル(F)</li>
+		<li>表示(V)</li>
+		<li>ツール(T)</li>
+		<li>設定(S)</li>
+		<li>ヘルプ(H)</li>
+	</ul>
+
+	<div id="comments"></div>
+
+	<div id="naming_dialog">
+		<input type="text" id="naming_text">
+	</div>
+
+	<div id="coloring_dialog">
+		<div id="red"></div>
+		<div id="green"></div>
+		<div id="blue"></div>
+		<div id="swatch" class="ui-widget-content ui-corner-all"></div>
+	</div>
+
+	<ul id="custom_context" class="jeegoocontext cm_default">
+		<li id="user_info" class="icon">
+			<span class="icon disk"></span>
+			ユーザー情報
+		</li>
+		<li class="separator">
+		</li>
+		<li id="naming" class="icon">
+			<span class="icon disk"></span>
+			名前をつける
+		</li>
+		<li id="coloring" class="icon">
+			<span class="icon disk"></span>
+			色をつける
+		</li>
+		<li class="separator">
+		</li>
+		<li id="tmp_hide" class="icon">
+			<span class="icon disk"></span>
+			一時的に非表示する
+		</li>
+		<li class="separator">
+		</li>
+		<li id="profile_page" class="icon">
+			<span class="icon disk"></span>
+			プロフィールページを開く
+		</li>
+	</ul>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+	<script src="../lib/flexigrid-1.1/js/flexigrid.origin.js"></script>
+	<script src="../lib/jeegoocontext/jquery.jeegoocontext.js"></script>
+	<script src="../lib/indexedDB.js"></script>
+	<script src="../lib/nico.live.js"></script>
+	<script src="./js/nicolive_chrome.js"></script>
+	<script src="./js/popup.js"></script>
+</body>
+</html>
