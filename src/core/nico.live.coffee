@@ -65,7 +65,7 @@ $.nlcm.Live = class
 
 	startComment: (callback) ->
 		@getPlayerStatusXML(=>
-			@connectCommentServer(@live_info['ms'])
+			@comment.connectCommentServer(@live_info['ms'])
 			tid = setInterval(=>
 				@readComment(callback)
 			, 30)

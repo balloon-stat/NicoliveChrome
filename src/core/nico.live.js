@@ -69,7 +69,7 @@
     };
     _Class.prototype.startComment = function(callback) {
       return this.getPlayerStatusXML(__bind(function() {
-        this.connectCommentServer(this.live_info['ms']);
+        this.comment.connectCommentServer(this.live_info['ms']);
         return tid = setInterval(__bind(function() {
           return this.readComment(callback);
         }, this), 30);
