@@ -6,6 +6,9 @@ License
 The MIT License.
 PLEASE READ LICENSE.txt
 
+*npapi*<br>
+http://code.google.com/p/npapi-sdk/
+
 概要
 ====
 サイト : http://kokudori.github.com/NicoliveChrome/
