@@ -1,5 +1,5 @@
 PROJECT(CPPBUILD)                                                                                                     
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
 
 # TODO
 # ひとまずVC++でも動かせるように改善する。
@@ -9,7 +9,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
 #また、このオプションを利用する場合、cxx/boost/以下にあるwin.tar.xzを適切に展開しておく必要があります。
 OPTION(USE_INTERNAL_BOOST "CMake will use boost that is built into repo." OFF)
 
-FIND_PACKAGE(Boost 1.47.0 REQUIRED) 
+FIND_PACKAGE(Boost 1.42.0 REQUIRED) 
 
 #IF(NOT MINGW AND USE_INTERNAL_BOOST)
 #	MESSAGE(FATAL_ERRO "USE_INTERNAL_BOOST Option can not be used on UNIX.")
