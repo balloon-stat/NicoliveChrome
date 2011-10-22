@@ -18,7 +18,8 @@
     _Class.prototype.connectCommentServer = function(server) {
       this.server = server;
       this.nc.connect(this.server['addr'], this.server['port']);
-      return this.nc.requestComment(this.server['thread'], '500');
+      this.nc.requestComment(this.server['thread'], '500');
+      return console.log('コメントサーバに接続しました');
     };
     _Class.prototype.getComment = function() {
       var comment;

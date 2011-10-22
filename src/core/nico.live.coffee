@@ -19,12 +19,11 @@ $.nlcm.Live = class
 		nc = plugin[0].NiconamaClient()
 		throw new Error('NPAPIオブジェクトが見つかりません') unless plugin?
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
-		@comment = new $.nlcm.Comment(@nc)
+		@comment = new $.nlcm.Comment(nc)
 
 	parsePlayerStatus = (player_status) ->
 		live_info = {}
 		stream_lines = ['id', 'title', 'description', 'owner_id', 'start_time', 'default_community']
-		console.log($(player_status))
 		$(player_status)
 			.find('getplayerstatus')
 			.tap(->
@@ -65,8 +64,11 @@ $.nlcm.Live = class
 		)
 
 	startComment: (callback) ->
-		@getPlayerStatusXML(->
-			tid = setInterval(readComment, 30, callback)
+		@getPlayerStatusXML(=>
+			@connectCommentServer(@live_info['ms'])
+			tid = setInterval(=>
+				@readComment(callback)
+			, 30)
 		)
 
 	readComment: (callback) ->

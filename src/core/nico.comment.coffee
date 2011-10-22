@@ -12,6 +12,7 @@ $.nlcm.Comment = class
 	connectCommentServer: (@server) ->
 		@nc.connect(@server['addr'], @server['port'])
 		@nc.requestComment(@server['thread'], '500')
+		console.log 'コメントサーバに接続しました'
 
 	getComment: ->
 		@comments = []

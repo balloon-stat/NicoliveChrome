@@ -27,13 +27,12 @@
         throw new Error('NPAPIオブジェクトが見つかりません');
       }
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
-      this.comment = new $.nlcm.Comment(this.nc);
+      this.comment = new $.nlcm.Comment(nc);
     }
     parsePlayerStatus = function(player_status) {
       var live_info, stream_lines;
       live_info = {};
       stream_lines = ['id', 'title', 'description', 'owner_id', 'start_time', 'default_community'];
-      console.log($(player_status));
       $(player_status).find('getplayerstatus').tap(function() {
         var status;
         status = this.attr('status');
@@ -69,9 +68,12 @@
       });
     };
     _Class.prototype.startComment = function(callback) {
-      return this.getPlayerStatusXML(function() {
-        return tid = setInterval(readComment, 30, callback);
-      });
+      return this.getPlayerStatusXML(__bind(function() {
+        this.connectCommentServer(this.live_info['ms']);
+        return tid = setInterval(__bind(function() {
+          return this.readComment(callback);
+        }, this), 30);
+      }, this));
     };
     _Class.prototype.readComment = function(callback) {
       var comment;
