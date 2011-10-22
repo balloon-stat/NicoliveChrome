@@ -1,0 +1,2 @@
+$.nlcm.Community = class
+	constructor: () ->

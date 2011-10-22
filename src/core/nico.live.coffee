@@ -1,0 +1,2 @@
+$.nlcm.Live = class
+	constructor: () ->

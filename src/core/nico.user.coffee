@@ -1,0 +1,2 @@
+$.nlcm.User = class
+	constructor: () ->
