@@ -11,25 +11,26 @@ store_setting =
 	chat:
 		index: 'id'
 
+createObjectStore = (version) ->
+	request = @db.setVersion(version)
+	request.onsuccess = (event) =>
+		$.each(store_setting, (key, value) =>
+			store = @db.createObjectStore(key, {keyPath: value['index']})
+			store.createIndex(value['index'], value['index'], { unique: value['unique'] })
+			console.log "#{key} テーブルを作成しました"
+		)
+	request.onerror = (event) =>
+		throw new Error('createStoreで失敗しました')
+
 $.nlcm.DB = class
 	constructor: (dbname, version) ->
 		request = indexedDB.open(dbname)
 		request.onsuccess = (event) =>
 			@db = request.result
-			createObjectStore(version) unless @db.version is version
+			createObjectStore.call(@, version) unless @db.version is version
 			console.log "DBの通信に成功しました. dbname : #{dbname}"
 		request.onerror = (event) ->
 			throw new Error("DBの通信に失敗しました. dbname : #{dbname}")
-	createObjectStore = (version) ->
-		request = @db.setVersion(version)
-		request.onsuccess = (event) =>
-			$.each(store_setting, (key, value) =>
-				store = @db.createObjectStore(key, {keyPath: value['index']})
-				store.createIndex(value['index'], value['index'], { unique: value['unique'] })
-				console.log "#{key} テーブルを作成しました"
-			)
-		request.onerror = (event) =>
-			throw new Error('createStoreで失敗しました')
 
 	addData: (name, data) ->
 		store = @db.transaction([], IDBTransaction.READ_WRITE).objectStore(name)

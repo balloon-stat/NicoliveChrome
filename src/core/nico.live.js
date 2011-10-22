@@ -4,7 +4,7 @@
   GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
   INDEXED_DB_VERSION = '1.5.0';
   $.nlcm.Live = (function() {
-    var getPlayerStatusXML, parsePlayerStatus, readComment, tid;
+    var parsePlayerStatus, tid;
     tid = {};
     _Class.getLiveInfo = function(url) {
       var liveid, title;
@@ -27,7 +27,7 @@
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
       this.comment = new $.nlcm.Comment(this.nc);
     }
-    parsePlayerStatus = function(that) {
+    parsePlayerStatus = function() {
       var live_info, stream_lines;
       live_info = {};
       stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community'];
@@ -50,10 +50,9 @@
           return live_info.ms[this.tagName] = $(this).text();
         });
       }).end().end();
-      that.live_info = live_info;
-      return that.getCommunityInfo();
+      return live_info;
     };
-    getPlayerStatusXML = function(callback) {
+    _Class.prototype.getPlayerStatusXML = function(callback) {
       var request_status;
       request_status = GET_PLAYER_STATUS + this.lv_id;
       return $.ajax({
@@ -61,7 +60,7 @@
         type: 'GET',
         dataType: 'xml',
         success: __bind(function(data, dataType) {
-          parsePlayerStatus(this);
+          this.live_info = parsePlayerStatus(this);
           return callback();
         }, this)
       });
@@ -71,7 +70,7 @@
         return tid = setInterval(readComment, 30, callback);
       });
     };
-    readComment = function(callback) {
+    _Class.prototype.readComment = function(callback) {
       var comment;
       comment = this.comment.getComment();
       return callback(comment);

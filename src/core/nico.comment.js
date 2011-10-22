@@ -11,7 +11,7 @@
     return _Class;
   })();
   $.nlcm.Comment = (function() {
-    var checkComment, parseComment;
+    var parseComment;
     function _Class(nc) {
       this.nc = nc;
     }
@@ -23,7 +23,7 @@
     _Class.prototype.getComment = function() {
       var comment;
       this.comments = [];
-      while (comment = parseComment()) {
+      while (comment = parseComment.call(this)) {
         this.comments.push(comment);
       }
       return this.comments;
@@ -44,9 +44,9 @@
           commented[info] = '0';
         }
       }
-      return checkComment(commented);
+      return this.checkComment(commented);
     };
-    checkComment = function(comment) {
+    _Class.prototype.checkComment = function(comment) {
       var is_administor;
       is_administor = comment['premium'] === '2' || comment['premium'] === '3';
       if (is_administor && comment['message'] === '/failure') {

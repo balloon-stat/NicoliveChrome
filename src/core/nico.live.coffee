@@ -22,7 +22,7 @@ $.nlcm.Live = class
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 		@comment = new $.nlcm.Comment(@nc)
 
-	parsePlayerStatus = (that) ->
+	parsePlayerStatus = ->
 		live_info = {}
 		stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community']
 		$(data)
@@ -51,17 +51,16 @@ $.nlcm.Live = class
 				)
 			.end()
 		.end()
-		that.live_info = live_info
-		that.getCommunityInfo()
+		return live_info
 
-	getPlayerStatusXML = (callback) ->
+	getPlayerStatusXML: (callback) ->
 		request_status = GET_PLAYER_STATUS + @lv_id
 		$.ajax(
 			url: request_status
 			type: 'GET'
 			dataType: 'xml'
 			success: (data, dataType) =>
-				parsePlayerStatus(@)
+				@live_info = parsePlayerStatus(@)
 				callback()
 		)
 
@@ -70,7 +69,7 @@ $.nlcm.Live = class
 			tid = setInterval(readComment, 30, callback)
 		)
 
-	readComment = (callback) ->
+	readComment: (callback) ->
 		comment = @comment.getComment()
 		callback(comment)
 

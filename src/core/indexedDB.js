@@ -1,5 +1,5 @@
 (function() {
-  var IDBKeyRange, IDBTransaction, indexedDB, store_setting;
+  var IDBKeyRange, IDBTransaction, createObjectStore, indexedDB, store_setting;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   indexedDB = window.webkitIndexedDB;
   IDBTransaction = window.webkitIDBTransaction;
@@ -18,15 +18,33 @@
       index: 'id'
     }
   };
+  createObjectStore = function(version) {
+    var request;
+    request = this.db.setVersion(version);
+    request.onsuccess = __bind(function(event) {
+      return $.each(store_setting, __bind(function(key, value) {
+        var store;
+        store = this.db.createObjectStore(key, {
+          keyPath: value['index']
+        });
+        store.createIndex(value['index'], value['index'], {
+          unique: value['unique']
+        });
+        return console.log("" + key + " テーブルを作成しました");
+      }, this));
+    }, this);
+    return request.onerror = __bind(function(event) {
+      throw new Error('createStoreで失敗しました');
+    }, this);
+  };
   $.nlcm.DB = (function() {
-    var createObjectStore;
     function _Class(dbname, version) {
       var request;
       request = indexedDB.open(dbname);
       request.onsuccess = __bind(function(event) {
         this.db = request.result;
         if (this.db.version !== version) {
-          createObjectStore(version);
+          createObjectStore.call(this, version);
         }
         return console.log("DBの通信に成功しました. dbname : " + dbname);
       }, this);
@@ -34,25 +52,6 @@
         throw new Error("DBの通信に失敗しました. dbname : " + dbname);
       };
     }
-    createObjectStore = function(version) {
-      var request;
-      request = this.db.setVersion(version);
-      request.onsuccess = __bind(function(event) {
-        return $.each(store_setting, __bind(function(key, value) {
-          var store;
-          store = this.db.createObjectStore(key, {
-            keyPath: value['index']
-          });
-          store.createIndex(value['index'], value['index'], {
-            unique: value['unique']
-          });
-          return console.log("" + key + " テーブルを作成しました");
-        }, this));
-      }, this);
-      return request.onerror = __bind(function(event) {
-        throw new Error('createStoreで失敗しました');
-      }, this);
-    };
     _Class.prototype.addData = function(name, data) {
       var store;
       store = this.db.transaction([], IDBTransaction.READ_WRITE).objectStore(name);
