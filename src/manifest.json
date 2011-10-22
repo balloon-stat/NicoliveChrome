@@ -13,7 +13,7 @@
 		"48": "./img/icon48.png"
 	},
 	"plugins": [
-		{"path": "./lib/NicoClientPlugin.dll"}
+		{"path": "lib/NicoClientPlugin.dll"}
 	],
 	"permissions": [
 		"http://watch.live.nicovideo.jp/",

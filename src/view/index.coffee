@@ -1,6 +1,6 @@
-live_info = getLiveInfo(document.URL)
+live_info = $.nlcm.Live.getLiveInfo(document.URL)
 document.title = live_info['title']
-nicolive = new $.nlcm.live(live_info[0])
+nicolive = new $.nlcm.Live(live_info[0])
 window.onbeforeunload = ->
 	nicolive.close()
 nicolive.startComment((comment) ->
