@@ -3,17 +3,17 @@
 	"version": "0.3.1",
 	"description": "ニコ生のChrome用アドオンです。コメビュやアラーム機能を提供します。",
 	"update_url": "http://kokudori.github.com/NicoliveChrome/updates.xml",
-	"background_page": "./src/back-ground.html",
+	"background_page": "./back-ground.html",
 	"browser_action": {
-		"default_icon": "./src/img/icon19.png"
+		"default_icon": "./img/icon19.png"
 	},
 	"icons": {
-		"128": "./src/img/icon128.png",
-		"16": "./src/img/icon16.png",
-		"48": "./src/img/icon48.png"
+		"128": "./img/icon128.png",
+		"16": "./img/icon16.png",
+		"48": "./img/icon48.png"
 	},
 	"plugins": [
-		{"path": "./src/lib/NicoClientPlugin.dll"}
+		{"path": "./lib/NicoClientPlugin.dll"}
 	],
 	"permissions": [
 		"http://watch.live.nicovideo.jp/",
