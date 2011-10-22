@@ -6,3 +6,4 @@ window.onbeforeunload = ->
 nicolive.startComment((comment) ->
 	console.log(comment)
 )
+console.log("hoge")

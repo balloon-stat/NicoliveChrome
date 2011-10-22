@@ -1,12 +1,13 @@
 (function() {
   var live_info, nicolive;
-  live_info = getLiveInfo(document.URL);
+  live_info = $.nlcm.Live.getLiveInfo(document.URL);
   document.title = live_info['title'];
-  nicolive = new $.nlcm.live(live_info[0]);
+  nicolive = new $.nlcm.Live(live_info[0]);
   window.onbeforeunload = function() {
     return nicolive.close();
   };
   nicolive.startComment(function(comment) {
     return console.log(comment);
   });
+  console.log("hoge");
 }).call(this);
