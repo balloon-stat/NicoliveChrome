@@ -32,7 +32,7 @@
     parsePlayerStatus = function(player_status) {
       var live_info, stream_lines;
       live_info = {};
-      stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community'];
+      stream_lines = ['id', 'title', 'description', 'owner_id', 'start_time', 'default_community'];
       console.log($(player_status));
       $(player_status).find('getplayerstatus').tap(function() {
         var status;
@@ -43,10 +43,9 @@
         return live_info.status = status;
       }).find('stream').tap(function() {
         live_info.stream = {};
-        $.each(stream_lines, function(index, value) {
-          return live_info.stream[value] = $(this).find(value).text();
-        });
-        return that.lv_id = this.find('id').text();
+        return $.each(stream_lines, __bind(function(index, value) {
+          return live_info.stream[value] = this.find(value).text();
+        }, this));
       }).end().find('ms').tap(function() {
         live_info.ms = {};
         return this.children().each(function() {
@@ -64,6 +63,7 @@
         dataType: 'xml',
         success: __bind(function(data, dataType) {
           this.live_info = parsePlayerStatus(data);
+          this.lv_id = this.live_info.stream['id'];
           return callback();
         }, this)
       });

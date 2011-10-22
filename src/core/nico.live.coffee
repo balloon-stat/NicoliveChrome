@@ -23,7 +23,7 @@ $.nlcm.Live = class
 
 	parsePlayerStatus = (player_status) ->
 		live_info = {}
-		stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community']
+		stream_lines = ['id', 'title', 'description', 'owner_id', 'start_time', 'default_community']
 		console.log($(player_status))
 		$(player_status)
 			.find('getplayerstatus')
@@ -36,10 +36,9 @@ $.nlcm.Live = class
 				.find('stream')
 				.tap(->
 					live_info.stream = {}
-					$.each(stream_lines, (index, value) ->
-						live_info.stream[value] = $(@).find(value).text()
+					$.each(stream_lines, (index, value) =>
+						live_info.stream[value] = @find(value).text()
 					)
-					that.lv_id = @find('id').text()
 				)
 			.end()
 				.find('ms')
@@ -61,6 +60,7 @@ $.nlcm.Live = class
 			dataType: 'xml'
 			success: (data, dataType) =>
 				@live_info = parsePlayerStatus(data)
+				@lv_id = @live_info.stream['id']
 				callback()
 		)
 
