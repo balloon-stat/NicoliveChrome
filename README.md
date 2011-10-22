@@ -9,9 +9,9 @@ PLEASE READ LICENSE.txt
 Dependence
 ==========
 *CommentViewerForGoogleChrome*<br>
-https://github.com/nus/CommentViewerForGoogleChrome
+https://github.com/nus/CommentViewerForGoogleChrome<br>
 *npapi*<br>
-http://code.google.com/p/npapi-sdk/
+http://code.google.com/p/npapi-sdk/<br>
 
 概要
 ====
