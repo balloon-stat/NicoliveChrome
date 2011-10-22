@@ -18,7 +18,9 @@
     function _Class(lv_id, plugin_name) {
       var nc, plugin;
       this.lv_id = lv_id;
-      plugin_name || (plugin_name = 'plugin');
+      if (plugin_name == null) {
+        plugin_name = 'plugin';
+      }
       plugin = $("#" + plugin_name);
       nc = plugin[0].NiconamaClient();
       if (plugin == null) {
@@ -27,11 +29,12 @@
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
       this.comment = new $.nlcm.Comment(this.nc);
     }
-    parsePlayerStatus = function() {
+    parsePlayerStatus = function(player_status) {
       var live_info, stream_lines;
       live_info = {};
       stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community'];
-      $(data).find('getplayerstatus').tap(function() {
+      console.log($(player_status));
+      $(player_status).find('getplayerstatus').tap(function() {
         var status;
         status = this.attr('status');
         if (status === 'fail') {
@@ -60,13 +63,13 @@
         type: 'GET',
         dataType: 'xml',
         success: __bind(function(data, dataType) {
-          this.live_info = parsePlayerStatus(this);
+          this.live_info = parsePlayerStatus(data);
           return callback();
         }, this)
       });
     };
     _Class.prototype.startComment = function(callback) {
-      return getPlayerStatusXML(function() {
+      return this.getPlayerStatusXML(function() {
         return tid = setInterval(readComment, 30, callback);
       });
     };

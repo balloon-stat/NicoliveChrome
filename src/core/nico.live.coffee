@@ -14,18 +14,18 @@ $.nlcm.Live = class
 			title: title
 		}
 
-	constructor: (@lv_id, plugin_name) ->
-		plugin_name or= 'plugin'
+	constructor: (@lv_id, plugin_name='plugin') ->
 		plugin = $("##{plugin_name}")
 		nc = plugin[0].NiconamaClient()
 		throw new Error('NPAPIオブジェクトが見つかりません') unless plugin?
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 		@comment = new $.nlcm.Comment(@nc)
 
-	parsePlayerStatus = ->
+	parsePlayerStatus = (player_status) ->
 		live_info = {}
 		stream_lines = ['title', 'description', 'owner_id', 'start_time', 'default_community']
-		$(data)
+		console.log($(player_status))
+		$(player_status)
 			.find('getplayerstatus')
 			.tap(->
 				status = @attr('status')
@@ -60,12 +60,12 @@ $.nlcm.Live = class
 			type: 'GET'
 			dataType: 'xml'
 			success: (data, dataType) =>
-				@live_info = parsePlayerStatus(@)
+				@live_info = parsePlayerStatus(data)
 				callback()
 		)
 
 	startComment: (callback) ->
-		getPlayerStatusXML(->
+		@getPlayerStatusXML(->
 			tid = setInterval(readComment, 30, callback)
 		)
 
