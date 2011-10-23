@@ -6,10 +6,43 @@
   window.onbeforeunload = function() {
     return nicolive.close();
   };
+  $('#comments').flexigrid({
+    colModel: [
+      {
+        display: 'No.',
+        name: 'no',
+        width: 25,
+        align: 'center'
+      }, {
+        display: 'コメント',
+        name: 'message',
+        width: 520,
+        align: 'left'
+      }, {
+        display: 'ユーザー',
+        name: 'user_id',
+        width: 80,
+        align: 'center'
+      }, {
+        display: '時刻',
+        name: 'date',
+        width: 40,
+        align: 'center'
+      }
+    ],
+    height: '300',
+    resizable: false,
+    nowrap: false,
+    singleSelect: true,
+    striped: false,
+    dataType: 'json'
+  });
   nicolive.startComment(function(comments) {
-    $('#comments').comment(comments, nicolive.comment.getCommentInfo);
+    $('#comments').comment(comments);
     nicolive.comment.commentUpdate();
-    $('#comments td').context(nicolive.comment);
+    $('#comments tr').each(function() {
+      return this.context(nicolive.comment);
+    });
     return console.log(comments);
   });
 }).call(this);

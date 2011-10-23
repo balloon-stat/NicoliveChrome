@@ -1,7 +1,7 @@
 (function() {
   var is_first;
   is_first = true;
-  $.fn.comment = function(comments, get_comment) {
+  $.fn.comment = function(comments) {
     var bDiv, s_offset;
     bDiv = $('.flexigrid .bDiv');
     s_offset = bDiv[0].scrollHeight - bDiv.scrollTop() - bDiv[0].clientHeight;

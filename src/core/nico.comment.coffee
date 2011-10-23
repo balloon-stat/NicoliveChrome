@@ -9,7 +9,7 @@ $.nlcm.error.CommentError = class
 
 $.nlcm.Comment = class
 	constructor: (@nc) ->
-		@comments_all = []
+		@comments_all = {}
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 
 	connectCommentServer: (@server) ->
@@ -40,23 +40,25 @@ $.nlcm.Comment = class
 	getCommentByNo: (comment_no) ->
 		return @comments_all[comment_no]
 	
-	getCommentInfo: (comment_no) ->
+	getCommentInfo: (comment_no, callback) ->
 		user_id = @getCommentByNo[comment_no]['user_id']
-		return @db.getData('user', 'id', user_id)
+		@db.getData('user', 'id', user_id, callback)
 
 	updateComment: (comment_no, redata) ->
 		user_id = @getCommentByNo[comment_no]['user_id']
 		@db.updateData('user', 'id', user_id, redata)
 
 	commentUpdate: ->
+		that = this
 		$('#comments tr')
 			.each(->
 				$$ = $(this)
 				user_id = $$.find('td').eq(2)
 				comment_no = $$.find('td').eq(0).text()
-				comment_info = @getCommentInfo(comment_no)
-				user_id.find('div').text(comment_info['name'])
-				$$.css('background-color', comment_info['color'])
+				that.getCommentInfo(comment_no, (comment_info) =>
+					user_id.find('div').text(comment_info['name'])
+					$$.css('background-color', comment_info['color'])
+				)
 			)
 
 	parseComment = ->

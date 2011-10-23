@@ -1,6 +1,6 @@
 is_first = yes
 
-$.fn.comment = (comments, get_comment) ->
+$.fn.comment = (comments) ->
 	bDiv = $('.flexigrid .bDiv')
 	s_offset = bDiv[0].scrollHeight - bDiv.scrollTop() - bDiv[0].clientHeight
 	if is_first

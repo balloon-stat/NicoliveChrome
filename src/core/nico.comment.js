@@ -1,5 +1,6 @@
 (function() {
   var COMMENT_NEED_INFO, INDEXED_DB_VERSION;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   INDEXED_DB_VERSION = '1.5.0';
   COMMENT_NEED_INFO = ['thread', 'no', 'vpos', 'date', 'user_id', 'premium', 'anonymity'];
   $.nlcm.error.CommentError = (function() {
@@ -15,7 +16,7 @@
     var parseComment;
     function _Class(nc) {
       this.nc = nc;
-      this.comments_all = [];
+      this.comments_all = {};
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
     }
     _Class.prototype.connectCommentServer = function(server) {
@@ -49,10 +50,10 @@
     _Class.prototype.getCommentByNo = function(comment_no) {
       return this.comments_all[comment_no];
     };
-    _Class.prototype.getCommentInfo = function(comment_no) {
+    _Class.prototype.getCommentInfo = function(comment_no, callback) {
       var user_id;
       user_id = this.getCommentByNo[comment_no]['user_id'];
-      return this.db.getData('user', 'id', user_id);
+      return this.db.getData('user', 'id', user_id, callback);
     };
     _Class.prototype.updateComment = function(comment_no, redata) {
       var user_id;
@@ -60,14 +61,17 @@
       return this.db.updateData('user', 'id', user_id, redata);
     };
     _Class.prototype.commentUpdate = function() {
+      var that;
+      that = this;
       return $('#comments tr').each(function() {
-        var $$, comment_info, comment_no, user_id;
+        var $$, comment_no, user_id;
         $$ = $(this);
         user_id = $$.find('td').eq(2);
         comment_no = $$.find('td').eq(0).text();
-        comment_info = this.getCommentInfo(comment_no);
-        user_id.find('div').text(comment_info['name']);
-        return $$.css('background-color', comment_info['color']);
+        return that.getCommentInfo(comment_no, __bind(function(comment_info) {
+          user_id.find('div').text(comment_info['name']);
+          return $$.css('background-color', comment_info['color']);
+        }, this));
       });
     };
     parseComment = function() {
