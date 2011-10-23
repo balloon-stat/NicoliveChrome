@@ -1,5 +1,4 @@
 GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v='
-INDEXED_DB_VERSION = '1.5.0'
 
 $.nlcm.Live = class
 	tid = {}
@@ -18,7 +17,6 @@ $.nlcm.Live = class
 		plugin = $("##{plugin_name}")
 		nc = plugin[0].NiconamaClient()
 		throw new Error('NPAPIオブジェクトが見つかりません') unless plugin?
-		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 		@comment = new $.nlcm.Comment(nc)
 
 	parsePlayerStatus = (player_status) ->

@@ -36,13 +36,16 @@ $.nlcm.DB = class
 		store = @db.transaction([], IDBTransaction.READ_WRITE).objectStore(name)
 		store.add(data)
 
-	getData: (name, index_tx, search, func) ->
+	getData: (name, index_tx, search) ->
 		store = @db.transaction([], IDBTransaction.READ_ONLY).objectStore(name)
 		request = store.index(index_tx).get(search)
+		return request.result
+		###
 		request.onsuccess = (event) =>
 			func(event.target.result)
 		request.onerror = (event) =>
 			throw new Error('getDataで失敗しました')
+		###
 
 	updateData: (name, index_tx, search, redata) ->
 		store = @db.transaction([], IDBTransaction.READ_WRITE).objectStore(name)

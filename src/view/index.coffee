@@ -3,7 +3,9 @@ document.title = live_info['title']
 nicolive = new $.nlcm.Live(live_info['id'])
 window.onbeforeunload = ->
 	nicolive.close()
-nicolive.startComment((comment) ->
-	console.log(comment)
+nicolive.startComment((comments) ->
+	$('#comments').comment(comments, nicolive.comment.getCommentInfo)
+	nicolive.comment.commentUpdate()
+	$('#comments td').context(nicolive.comment)
+	console.log(comments)
 )
-console.log("hoge")

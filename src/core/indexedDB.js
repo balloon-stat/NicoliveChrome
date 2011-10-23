@@ -57,16 +57,17 @@
       store = this.db.transaction([], IDBTransaction.READ_WRITE).objectStore(name);
       return store.add(data);
     };
-    _Class.prototype.getData = function(name, index_tx, search, func) {
+    _Class.prototype.getData = function(name, index_tx, search) {
       var request, store;
       store = this.db.transaction([], IDBTransaction.READ_ONLY).objectStore(name);
       request = store.index(index_tx).get(search);
-      request.onsuccess = __bind(function(event) {
-        return func(event.target.result);
-      }, this);
-      return request.onerror = __bind(function(event) {
-        throw new Error('getDataで失敗しました');
-      }, this);
+      return request.result;
+      /*
+      		request.onsuccess = (event) =>
+      			func(event.target.result)
+      		request.onerror = (event) =>
+      			throw new Error('getDataで失敗しました')
+      		*/
     };
     _Class.prototype.updateData = function(name, index_tx, search, redata) {
       var request, store;

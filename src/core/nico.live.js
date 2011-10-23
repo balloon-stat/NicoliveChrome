@@ -1,8 +1,7 @@
 (function() {
-  var GET_PLAYER_STATUS, INDEXED_DB_VERSION;
+  var GET_PLAYER_STATUS;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
-  INDEXED_DB_VERSION = '1.5.0';
   $.nlcm.Live = (function() {
     var parsePlayerStatus, tid;
     tid = {};
@@ -26,7 +25,6 @@
       if (plugin == null) {
         throw new Error('NPAPIオブジェクトが見つかりません');
       }
-      this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
       this.comment = new $.nlcm.Comment(nc);
     }
     parsePlayerStatus = function(player_status) {

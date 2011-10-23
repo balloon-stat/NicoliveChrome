@@ -6,8 +6,10 @@
   window.onbeforeunload = function() {
     return nicolive.close();
   };
-  nicolive.startComment(function(comment) {
-    return console.log(comment);
+  nicolive.startComment(function(comments) {
+    $('#comments').comment(comments, nicolive.comment.getCommentInfo);
+    nicolive.comment.commentUpdate();
+    $('#comments td').context(nicolive.comment);
+    return console.log(comments);
   });
-  console.log("hoge");
 }).call(this);
