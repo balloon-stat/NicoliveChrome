@@ -6,6 +6,17 @@ License
 The MIT License.
 PLEASE READ LICENSE.txt
 
+Dependence
+==========
+*CommentViewerForGoogleChrome*<br>
+https://github.com/nus/CommentViewerForGoogleChrome<br>
+*npapi*<br>
+http://code.google.com/p/npapi-sdk/<br>
+*boost*<br>
+http://www.boost.org/<br>
+
+以上に依存していますがboost以外はリポジトリに内蔵してあります.
+
 概要
 ====
 サイト : http://kokudori.github.com/NicoliveChrome/

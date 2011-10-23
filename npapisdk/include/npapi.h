@@ -34,6 +34,7 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
+
 #include<config.hpp>
 #ifdef P_MINGW
 #include<inttypes.h>
@@ -383,7 +384,7 @@ typedef enum {
   , NPPVpluginCoreAnimationLayer = 1003
 #endif
 
-#if (MOZ_PLATFORM_MAEMO == 5) || (MOZ_PLATFORM_MAEMO == 6)
+#if defined(MOZ_PLATFORM_MAEMO) && ((MOZ_PLATFORM_MAEMO == 5) || (MOZ_PLATFORM_MAEMO == 6))
   , NPPVpluginWindowlessLocalBool = 2002
 #endif
 } NPPVariable;
@@ -438,7 +439,7 @@ typedef enum {
   , NPNVsupportsCompositingCoreAnimationPluginsBool = 74656 /* TRUE if the browser supports
                                                                CA model compositing */
 #endif
-#if (MOZ_PLATFORM_MAEMO == 5) || (MOZ_PLATFORM_MAEMO == 6)
+#if defined(MOZ_PLATFORM_MAEMO) && ((MOZ_PLATFORM_MAEMO == 5) || (MOZ_PLATFORM_MAEMO == 6))
   , NPNVSupportsWindowlessLocal = 2002
 #endif
 } NPNVariable;

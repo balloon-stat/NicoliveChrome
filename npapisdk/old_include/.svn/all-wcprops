@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 30
-/svn/!svn/ver/14/trunk/headers
+/svn/!svn/ver/13/trunk/headers
 END
 npruntime.h
 K 25
@@ -25,5 +25,5 @@ npapi.h
 K 25
 svn:wc:ra_dav:version-url
 V 38
-/svn/!svn/ver/14/trunk/headers/npapi.h
+/svn/!svn/ver/13/trunk/headers/npapi.h
 END
