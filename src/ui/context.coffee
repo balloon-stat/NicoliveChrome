@@ -2,31 +2,32 @@ comment = {}
 comment_data = {}
 
 openUserProfile = ->
-	window.open("../user_info.html?user_id=#{comment_data['user_id']}",
+	window.open("../view/user_info.html?user_id=#{comment_data['user_id']}",
 					'user_window', 'status=-1, height=360, width=350')
 
 setNamig = ->
-	comment_info = comment.getComemntInfo(comment_data['no'])
-	if comment_info['id'] is comment_info['name']
-		$.nlcm.User.getUserInfo(comment_data['user_id'], (name, thumbnail) ->
-			$('#naming_text').val(name)
-		, no) if comment_data['anonymity'] is '0'
-	else
-		$('#naming_text').val(comment_info['name'])
-	$('#naming_dialog').dialog(
-		modal: true
-		buttons: [
-			text: 'OK'
-			click: ->
-				naming = $(this).find('input:text')
-				comment.updateComment(comment_no,
-					name: naming.val()
-				)
-				console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
-				comment.commentUpdate()
-				naming.val('');
-				$(this).dialog('close');
-		]
+	comment.getComemntInfo(comment_data['no'], (comment_info) ->
+		if comment_info['id'] is comment_info['name']
+			$.nlcm.User.getUserInfo(comment_data['user_id'], (name, thumbnail) ->
+				$('#naming_text').val(name)
+			, no) if comment_data['anonymity'] is '0'
+		else
+			$('#naming_text').val(comment_info['name'])
+		$('#naming_dialog').dialog(
+			modal: true
+			buttons: [
+				text: 'OK'
+				click: ->
+					naming = $(this).find('input:text')
+					comment.updateComment(comment_no,
+						name: naming.val()
+					)
+					console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
+					comment.commentUpdate()
+					naming.val('');
+					$(this).dialog('close');
+			]
+		)
 	)
 
 setColoring = ->
@@ -76,7 +77,7 @@ contextSelect = (type, target) ->
 		when 'tmp_hide'
 			userCommentHide()
 		when 'profile_page'
-			$.nico.User.jumpUserProfile()
+			$.nlcm.User.jumpUserProfile(comment_data['user_id'])
 		else
 			return false
 

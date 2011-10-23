@@ -3,38 +3,38 @@
   comment = {};
   comment_data = {};
   openUserProfile = function() {
-    return window.open("../user_info.html?user_id=" + comment_data['user_id'], 'user_window', 'status=-1, height=360, width=350');
+    return window.open("../view/user_info.html?user_id=" + comment_data['user_id'], 'user_window', 'status=-1, height=360, width=350');
   };
   setNamig = function() {
-    var comment_info;
-    comment_info = comment.getComemntInfo(comment_data['no']);
-    if (comment_info['id'] === comment_info['name']) {
-      if (comment_data['anonymity'] === '0') {
-        $.nlcm.User.getUserInfo(comment_data['user_id'], function(name, thumbnail) {
-          return $('#naming_text').val(name);
-        }, false);
-      }
-    } else {
-      $('#naming_text').val(comment_info['name']);
-    }
-    return $('#naming_dialog').dialog({
-      modal: true,
-      buttons: [
-        {
-          text: 'OK',
-          click: function() {
-            var naming;
-            naming = $(this).find('input:text');
-            comment.updateComment(comment_no, {
-              name: naming.val()
-            });
-            console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
-            comment.commentUpdate();
-            naming.val('');
-            return $(this).dialog('close');
-          }
+    return comment.getComemntInfo(comment_data['no'], function(comment_info) {
+      if (comment_info['id'] === comment_info['name']) {
+        if (comment_data['anonymity'] === '0') {
+          $.nlcm.User.getUserInfo(comment_data['user_id'], function(name, thumbnail) {
+            return $('#naming_text').val(name);
+          }, false);
         }
-      ]
+      } else {
+        $('#naming_text').val(comment_info['name']);
+      }
+      return $('#naming_dialog').dialog({
+        modal: true,
+        buttons: [
+          {
+            text: 'OK',
+            click: function() {
+              var naming;
+              naming = $(this).find('input:text');
+              comment.updateComment(comment_no, {
+                name: naming.val()
+              });
+              console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
+              comment.commentUpdate();
+              naming.val('');
+              return $(this).dialog('close');
+            }
+          }
+        ]
+      });
     });
   };
   setColoring = function() {
@@ -93,7 +93,7 @@
       case 'tmp_hide':
         return userCommentHide();
       case 'profile_page':
-        return $.nico.User.jumpUserProfile();
+        return $.nlcm.User.jumpUserProfile(comment_data['user_id']);
       default:
         return false;
     }

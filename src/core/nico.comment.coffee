@@ -10,6 +10,7 @@ $.nlcm.error.CommentError = class
 $.nlcm.Comment = class
 	constructor: (@nc) ->
 		@comments_all = {}
+		@count = 0
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 
 	connectCommentServer: (@server) ->
@@ -21,8 +22,9 @@ $.nlcm.Comment = class
 		comments = []
 		while comment = parseComment.call(this)
 			@comments_all[comment['no']] = comment
+			@count += 1
 			comments.push(
-				id: @comments_all.length
+				id: @count
 				cell: [
 					comment['no']
 					comment['message']

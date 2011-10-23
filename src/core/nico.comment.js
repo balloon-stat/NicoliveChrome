@@ -17,6 +17,7 @@
     function _Class(nc) {
       this.nc = nc;
       this.comments_all = {};
+      this.count = 0;
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
     }
     _Class.prototype.connectCommentServer = function(server) {
@@ -33,8 +34,9 @@
       comments = [];
       while (comment = parseComment.call(this)) {
         this.comments_all[comment['no']] = comment;
+        this.count += 1;
         comments.push({
-          id: this.comments_all.length,
+          id: this.count,
           cell: [comment['no'], comment['message'], comment['user_id'], comment['vpos']]
         });
         if (save) {
