@@ -83,13 +83,13 @@ $.nlcm.Comment = class
 		commented = {}
 		return false unless $$.text()
 		commented['message'] = $$.text()
-		vpos = msec2m_s(commented['vpos'] * 10)
-						.map((time) -> fill_zero(time))
-		commented['vpos'] = vpos[0] + ':' + vpos[1]
 
 		for info in COMMENT_NEED_INFO
 			commented[info] = $$.attr(info)
 			commented[info] = '0' unless commented[info]?
+		vpos = msec2m_s(commented['vpos'] * 10)
+						.map((time) -> fill_zero(time))
+		commented['vpos'] = vpos[0] + ':' + vpos[1]
 		@checkComment(commented)
 
 	checkComment: (comment) ->

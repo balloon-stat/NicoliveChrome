@@ -101,10 +101,6 @@
         return false;
       }
       commented['message'] = $$.text();
-      vpos = msec2m_s(commented['vpos'] * 10).map(function(time) {
-        return fill_zero(time);
-      });
-      commented['vpos'] = vpos[0] + ':' + vpos[1];
       for (_i = 0, _len = COMMENT_NEED_INFO.length; _i < _len; _i++) {
         info = COMMENT_NEED_INFO[_i];
         commented[info] = $$.attr(info);
@@ -112,6 +108,10 @@
           commented[info] = '0';
         }
       }
+      vpos = msec2m_s(commented['vpos'] * 10).map(function(time) {
+        return fill_zero(time);
+      });
+      commented['vpos'] = vpos[0] + ':' + vpos[1];
       return this.checkComment(commented);
     };
     _Class.prototype.checkComment = function(comment) {
