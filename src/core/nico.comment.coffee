@@ -98,5 +98,5 @@ $.nlcm.Comment = class
 		is_administor = comment['premium'] is '2' or comment['premium'] is '3'
 		is_close = comment['message'] is '/failure' or comment['message'] is '/disconnect'
 		if is_administor and is_close
-			throw new $.nlcm.error.CloseLiveError 'disconnect'
+			throw new Error 'disconnect'
 		return comment

@@ -16,7 +16,7 @@ $.nlcm.Live = class
 	constructor: (@lv_id, plugin_name='plugin') ->
 		plugin = $("##{plugin_name}")
 		nc = plugin[0].NiconamaClient()
-		throw new Error('NPAPIオブジェクトが見つかりません') unless plugin?
+		throw new Error 'NotFoundNPAPI' unless plugin?
 		@comment = new $.nlcm.Comment(nc)
 
 	parsePlayerStatus = (player_status) ->
@@ -27,7 +27,7 @@ $.nlcm.Live = class
 			.tap(->
 				status = @attr('status')
 				if status is 'fail'
-					throw new $.nlcm.error.CloseLiveError 'getPlayerStatus is fail'
+					throw new Error 'StatusFailError'
 				live_info.status = status
 			)
 				.find('stream')
@@ -73,7 +73,7 @@ $.nlcm.Live = class
 		try
 			comment = @comment.getComment()
 		catch e
-			@stopComment() if e.constructor.name is 'CloseLiveError'
+			@stopComment() if e.message is 'CloseLiveError'
 			throw e
 		callback(comment) if comment.length > 0
 

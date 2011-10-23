@@ -110,7 +110,7 @@
       is_administor = comment['premium'] === '2' || comment['premium'] === '3';
       is_close = comment['message'] === '/failure' || comment['message'] === '/disconnect';
       if (is_administor && is_close) {
-        throw new $.nlcm.error.CloseLiveError('disconnect');
+        throw new Error('disconnect');
       }
       return comment;
     };

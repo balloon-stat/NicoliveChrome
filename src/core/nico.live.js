@@ -23,7 +23,7 @@
       plugin = $("#" + plugin_name);
       nc = plugin[0].NiconamaClient();
       if (plugin == null) {
-        throw new Error('NPAPIオブジェクトが見つかりません');
+        throw new Error('NotFoundNPAPI');
       }
       this.comment = new $.nlcm.Comment(nc);
     }
@@ -35,7 +35,7 @@
         var status;
         status = this.attr('status');
         if (status === 'fail') {
-          throw new $.nlcm.error.CloseLiveError('getPlayerStatus is fail');
+          throw new Error('StatusFailError');
         }
         return live_info.status = status;
       }).find('stream').tap(function() {
@@ -78,7 +78,7 @@
       try {
         comment = this.comment.getComment();
       } catch (e) {
-        if (e.constructor.name === 'CloseLiveError') {
+        if (e.message === 'CloseLiveError') {
           this.stopComment();
         }
         throw e;

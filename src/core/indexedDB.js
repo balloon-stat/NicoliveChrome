@@ -21,7 +21,7 @@
   createObjectStore = function(version) {
     var request;
     request = this.db.setVersion(version);
-    request.onsuccess = __bind(function(event) {
+    return request.onsuccess = __bind(function(event) {
       return $.each(store_setting, __bind(function(key, value) {
         var store;
         store = this.db.createObjectStore(key, {
@@ -32,9 +32,6 @@
         });
         return console.log("" + key + " テーブルを作成しました");
       }, this));
-    }, this);
-    return request.onerror = __bind(function(event) {
-      throw new Error('createStoreで失敗しました');
     }, this);
   };
   $.nlcm.DB = (function() {
@@ -48,9 +45,6 @@
         }
         return console.log('DBの通信に成功しました.');
       }, this);
-      request.onerror = function(event) {
-        throw new Error('DBの通信に失敗しました.');
-      };
     }
     _Class.prototype.addData = function(name, data) {
       var store;
@@ -61,11 +55,8 @@
       var request, store;
       store = this.db.transaction([], IDBTransaction.READ_ONLY).objectStore(name);
       request = store.index(index_tx).get(search);
-      request.onsuccess = __bind(function(event) {
+      return request.onsuccess = __bind(function(event) {
         return callback(event.target.result);
-      }, this);
-      return request.onerror = __bind(function(event) {
-        throw new Error('getDataで失敗しました');
       }, this);
     };
     _Class.prototype.updateData = function(name, index_tx, search, redata) {
