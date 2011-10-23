@@ -18,6 +18,7 @@ $('#comments').flexigrid(
 	striped: false
 	dataType: 'json'
 )
+$('.hDivBox tr th :eq(1)').css('text-align', 'center')
 
 nicolive.startComment((comments) ->
 	$('#comments').comment(comments)

@@ -6,7 +6,7 @@
     return window.open("../view/user_info.html?user_id=" + comment_data['user_id'], 'user_window', 'status=-1, height=360, width=350');
   };
   setNamig = function() {
-    return comment.getComemntInfo(comment_data['no'], function(comment_info) {
+    return comment.getCommentInfo(comment_data['no'], function(comment_info) {
       if (comment_info['id'] === comment_info['name']) {
         if (comment_data['anonymity'] === '0') {
           $.nlcm.User.getUserInfo(comment_data['user_id'], function(name, thumbnail) {
@@ -24,10 +24,10 @@
             click: function() {
               var naming;
               naming = $(this).find('input:text');
-              comment.updateComment(comment_no, {
+              comment.updateComment(comment_data['no'], {
                 name: naming.val()
               });
-              console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
+              console.log(comment_data['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
               comment.commentUpdate();
               naming.val('');
               return $(this).dialog('close');
@@ -54,7 +54,7 @@
             comment.updateComment(comment_data['no'], {
               color: RGB
             });
-            console.log(user_id + 'の色を' + RGB + 'に変更しました.');
+            console.log(comment_data['user_id'] + 'の色を' + RGB + 'に変更しました.');
             comment.commentUpdate();
             return $(this).dialog('close');
           }
@@ -64,9 +64,11 @@
   };
   userCommentHide = function() {
     return $('comments tr').each(function() {
-      var $$, _comment;
+      var $$, comment_no, current_comment, _comment;
       $$ = $(this);
-      if ($$.find('td').eq(2).children('div').text() !== comment_data['user_id']) {
+      comment_no = $$.find('td').eq(0).text();
+      current_comment = comment.getCommentByNo[comment_no];
+      if (current_comment['user_id'] !== comment_data['user_id']) {
         return;
       }
       _comment = $$.find('td').eq(1).children('div');

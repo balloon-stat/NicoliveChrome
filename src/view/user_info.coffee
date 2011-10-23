@@ -3,8 +3,10 @@ user_info = {}
 user_link_to = (content) ->
 	"<a href='http://www.nicovideo.jp/user/#{user_id}'>#{content}</a>"
 
-$.nlcm.User.getUserInfo(user_id, (info) ->
-	user_info = info
+$.nlcm.User.getUserInfo(user_id, (name, thumbnail) ->
+	user_info =
+		name: name
+		thumbnail: thumbnail
 , false)
 
 $('#user_profile')

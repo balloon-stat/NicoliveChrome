@@ -37,6 +37,7 @@
     striped: false,
     dataType: 'json'
   });
+  $('.hDivBox tr th :eq(1)').css('text-align', 'center');
   nicolive.startComment(function(comments) {
     $('#comments').comment(comments);
     nicolive.comment.commentUpdate();

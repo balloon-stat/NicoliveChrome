@@ -5,10 +5,10 @@ $.fn.tap = (func, that) ->
 
 $.nlcm.Util = class
 	constructor: () ->
-	escapeHTML = (val) ->
+	@escapeHTML: (val) ->
 		$('<div/>').text(val).html()
 
-	hexFromRGB = (r, g, b) ->
+	@hexFromRGB: (r, g, b) ->
 		hex = [
 			r.toString(16)
 			g.toString(16)

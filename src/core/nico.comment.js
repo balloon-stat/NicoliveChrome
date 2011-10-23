@@ -59,7 +59,7 @@
     };
     _Class.prototype.updateComment = function(comment_no, redata) {
       var user_id;
-      user_id = this.getCommentByNo[comment_no]['user_id'];
+      user_id = this.getCommentByNo(comment_no)['user_id'];
       return this.db.updateData('user', 'id', user_id, redata);
     };
     _Class.prototype.commentUpdate = function() {

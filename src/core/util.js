@@ -5,12 +5,11 @@
     return this;
   };
   $.nlcm.Util = (function() {
-    var escapeHTML, hexFromRGB;
     function _Class() {}
-    escapeHTML = function(val) {
+    _Class.escapeHTML = function(val) {
       return $('<div/>').text(val).html();
     };
-    hexFromRGB = function(r, g, b) {
+    _Class.hexFromRGB = function(r, g, b) {
       var hex;
       hex = [r.toString(16), g.toString(16), b.toString(16)];
       $.each(hex, function(nr, val) {

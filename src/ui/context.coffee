@@ -6,7 +6,7 @@ openUserProfile = ->
 					'user_window', 'status=-1, height=360, width=350')
 
 setNamig = ->
-	comment.getComemntInfo(comment_data['no'], (comment_info) ->
+	comment.getCommentInfo(comment_data['no'], (comment_info) ->
 		if comment_info['id'] is comment_info['name']
 			$.nlcm.User.getUserInfo(comment_data['user_id'], (name, thumbnail) ->
 				$('#naming_text').val(name)
@@ -19,10 +19,10 @@ setNamig = ->
 				text: 'OK'
 				click: ->
 					naming = $(this).find('input:text')
-					comment.updateComment(comment_no,
+					comment.updateComment(comment_data['no'],
 						name: naming.val()
 					)
-					console.log(comment_info['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
+					console.log(comment_data['user_id'] + 'を' + naming.val() + 'に名前を変更しました.');
 					comment.commentUpdate()
 					naming.val('');
 					$(this).dialog('close');
@@ -45,7 +45,7 @@ setColoring = ->
 				comment.updateComment(comment_data['no'],
 					color: RGB
 				)
-				console.log(user_id + 'の色を' + RGB + 'に変更しました.')
+				console.log(comment_data['user_id'] + 'の色を' + RGB + 'に変更しました.')
 				comment.commentUpdate()
 				$(this).dialog('close')
 		]
@@ -54,7 +54,9 @@ setColoring = ->
 userCommentHide = () ->
 	$('comments tr').each(->
 		$$ = $(this)
-		return unless $$.find('td').eq(2).children('div').text() is comment_data['user_id']
+		comment_no = $$.find('td').eq(0).text()
+		current_comment = comment.getCommentByNo[comment_no]
+		return if current_comment['user_id'] isnt comment_data['user_id']
 		_comment = $$.find('td').eq(1).children('div')
 		if _comment.data('cache')
 			_comment.text(_comment.data('cache'))
