@@ -40,9 +40,9 @@ setColoring = ->
 				r = $('#red').slider('value')
 				g = $('#green').slider('value')
 				b = $('#blue').slider('value')
-				RGB = '#' + $.hexFromRGB(r, g, b)
+				RGB = '#' + $.nlcm.Util.hexFromRGB(r, g, b)
 				console.log("R : #{r}, G : #{g}, B : #{b}")
-				comment.updateComment(comment_no,
+				comment.updateComment(comment_data['no'],
 					color: RGB
 				)
 				console.log(user_id + 'の色を' + RGB + 'に変更しました.')
@@ -62,6 +62,7 @@ userCommentHide = () ->
 		else
 			_comment.data('cache', _comment.text())
 			_comment.text('非表示です')
+		comment.commentUpdate()
 	)
 
 contextSelect = (type, target) ->

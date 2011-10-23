@@ -3,7 +3,7 @@ user_info = {}
 user_link_to = (content) ->
 	"<a href='http://www.nicovideo.jp/user/#{user_id}'>#{content}</a>"
 
-$.nico.User.getUserInfo(user_id, (info) ->
+$.nlcm.User.getUserInfo(user_id, (info) ->
 	user_info = info
 , false)
 

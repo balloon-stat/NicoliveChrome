@@ -23,5 +23,4 @@ nicolive.startComment((comments) ->
 	$('#comments').comment(comments)
 	nicolive.comment.commentUpdate()
 	$('#comments tr').menu(nicolive.comment)
-	console.log(comments)
 )

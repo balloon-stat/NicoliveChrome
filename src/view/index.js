@@ -40,7 +40,6 @@
   nicolive.startComment(function(comments) {
     $('#comments').comment(comments);
     nicolive.comment.commentUpdate();
-    $('#comments tr').menu(nicolive.comment);
-    return console.log(comments);
+    return $('#comments tr').menu(nicolive.comment);
   });
 }).call(this);
