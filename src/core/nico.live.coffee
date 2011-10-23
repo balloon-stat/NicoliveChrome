@@ -16,7 +16,6 @@ $.nlcm.Live = class
 	constructor: (@lv_id, plugin_name='plugin') ->
 		plugin = $("##{plugin_name}")
 		nc = plugin[0].NiconamaClient()
-		throw new Error 'NotFoundNPAPI' unless plugin?
 		@comment = new $.nlcm.Comment(nc)
 
 	parsePlayerStatus = (player_status) ->
@@ -73,7 +72,7 @@ $.nlcm.Live = class
 		try
 			comment = @comment.getComment()
 		catch e
-			@stopComment() if e.message is 'CloseLiveError'
+			@stopComment() if e.message is 'disconnect'
 			throw e
 		callback(comment) if comment.length > 0
 

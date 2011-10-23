@@ -22,9 +22,6 @@
       }
       plugin = $("#" + plugin_name);
       nc = plugin[0].NiconamaClient();
-      if (plugin == null) {
-        throw new Error('NotFoundNPAPI');
-      }
       this.comment = new $.nlcm.Comment(nc);
     }
     parsePlayerStatus = function(player_status) {
@@ -78,7 +75,7 @@
       try {
         comment = this.comment.getComment();
       } catch (e) {
-        if (e.message === 'CloseLiveError') {
+        if (e.message === 'disconnect') {
           this.stopComment();
         }
         throw e;
