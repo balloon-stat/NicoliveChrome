@@ -1,4 +1,12 @@
 (function() {
+  Number.prototype.times = function(f) {
+    var i, _results;
+    _results = [];
+    for (i = 1; 1 <= this ? i <= this : i >= this; 1 <= this ? i++ : i--) {
+      _results.push(f(i));
+    }
+    return _results;
+  };
   $.fn.tap = function(func, that) {
     that || (that = this);
     func.call(that, this);

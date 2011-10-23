@@ -1,3 +1,6 @@
+Number::times = (f) ->
+	f i for i in [1..this]
+
 $.fn.tap = (func, that) ->
 	that or= this
 	func.call(that, this)

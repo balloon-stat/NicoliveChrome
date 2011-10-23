@@ -13,7 +13,7 @@
     return _Class;
   })();
   $.nlcm.Comment = (function() {
-    var parseComment;
+    var fill_zero, msec2m_s, parseComment;
     function _Class(nc) {
       this.nc = nc;
       this.comments_all = {};
@@ -76,8 +76,24 @@
         }, this));
       });
     };
+    msec2m_s = function(msec) {
+      var min, sec;
+      sec = Math.round(msec / 1000);
+      min = Math.floor(sec / 60);
+      sec = sec - 60 * min;
+      return [min, sec];
+    };
+    fill_zero = function(num, fill) {
+      var filled;
+      fill || (fill = 2);
+      filled = '0';
+      fill.times(function(i) {
+        return filled += filled;
+      });
+      return (filled + num).slice(-fill);
+    };
     parseComment = function() {
-      var $$, comment, commented, info, _i, _len;
+      var $$, comment, commented, info, vpos, _i, _len;
       comment = this.nc.getComment();
       $$ = $(comment);
       commented = {};
@@ -85,6 +101,10 @@
         return false;
       }
       commented['message'] = $$.text();
+      vpos = msec2m_s(commented['vpos'] * 10).map(function(time) {
+        return fill_zero(time);
+      });
+      commented['vpos'] = vpos[0] + ':' + vpos[1];
       for (_i = 0, _len = COMMENT_NEED_INFO.length; _i < _len; _i++) {
         info = COMMENT_NEED_INFO[_i];
         commented[info] = $$.attr(info);

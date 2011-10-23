@@ -63,12 +63,29 @@ $.nlcm.Comment = class
 				)
 			)
 
+	msec2m_s = (msec) ->
+		sec = Math.round(msec / 1000)
+		min = Math.floor(sec / 60)
+		sec = sec - 60 * min
+		return [min, sec]
+
+	fill_zero = (num, fill) ->
+		fill or=  2
+		filled = '0'
+		fill.times((i) ->
+			filled += filled
+		)
+		return (filled + num).slice(-fill)
+
 	parseComment = ->
 		comment = @nc.getComment()
 		$$ = $(comment)
 		commented = {}
 		return false unless $$.text()
 		commented['message'] = $$.text()
+		vpos = msec2m_s(commented['vpos'] * 10)
+						.map((time) -> fill_zero(time))
+		commented['vpos'] = vpos[0] + ':' + vpos[1]
 
 		for info in COMMENT_NEED_INFO
 			commented[info] = $$.attr(info)
