@@ -3,9 +3,8 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
   $.nlcm.Live = (function() {
-    var CloseLiveError, parsePlayerStatus, readComment, tid;
+    var parsePlayerStatus, readComment, tid;
     tid = {};
-    CloseLiveError = $.nlcm.error.CloseLiveError;
     _Class.getLiveInfo = function(url) {
       var liveid, title;
       liveid = url.match(/lv\d+/) || url.match(/co\d+/);
@@ -78,8 +77,11 @@
       var comment;
       try {
         comment = this.comment.getComment();
-      } catch (CloseLiveError) {
-        this.stopComment();
+      } catch (e) {
+        if (e.constructor.name === 'CloseLiveError') {
+          this.stopComment();
+        }
+        throw e;
       }
       if (comment.length > 0) {
         return callback(comment);

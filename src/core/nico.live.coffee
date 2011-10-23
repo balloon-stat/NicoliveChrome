@@ -2,7 +2,6 @@ GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v='
 
 $.nlcm.Live = class
 	tid = {}
-	CloseLiveError = $.nlcm.error.CloseLiveError
 
 	@getLiveInfo: (url) ->
 		liveid = url.match(/lv\d+/) \
@@ -73,8 +72,9 @@ $.nlcm.Live = class
 	readComment = (callback) ->
 		try
 			comment = @comment.getComment()
-		catch CloseLiveError
-			@stopComment()
+		catch e
+			@stopComment() if e.constructor.name is 'CloseLiveError'
+			throw e
 		callback(comment) if comment.length > 0
 
 	stopComment: ->
