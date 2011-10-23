@@ -98,9 +98,9 @@
         return false;
     }
   };
-  $.fn.context = function(_comment) {
+  $.fn.menu = function(_comment) {
     comment = _comment;
-    return this.jeegoocontext('custom_context', {
+    return $(this).jeegoocontext('custom_context', {
       widthOverflowOffset: 0,
       heightOverflowOffset: 3,
       onSelect: function(e, target) {

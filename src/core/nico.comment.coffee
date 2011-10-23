@@ -41,7 +41,7 @@ $.nlcm.Comment = class
 		return @comments_all[comment_no]
 	
 	getCommentInfo: (comment_no, callback) ->
-		user_id = @getCommentByNo[comment_no]['user_id']
+		user_id = @getCommentByNo(comment_no)['user_id']
 		@db.getData('user', 'id', user_id, callback)
 
 	updateComment: (comment_no, redata) ->

@@ -22,9 +22,6 @@ $('#comments').flexigrid(
 nicolive.startComment((comments) ->
 	$('#comments').comment(comments)
 	nicolive.comment.commentUpdate()
-	$('#comments tr')
-		.each(->
-			@context(nicolive.comment)
-		)
+	$('#comments tr').menu(nicolive.comment)
 	console.log(comments)
 )

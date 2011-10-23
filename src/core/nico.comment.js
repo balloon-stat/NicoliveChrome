@@ -52,7 +52,7 @@
     };
     _Class.prototype.getCommentInfo = function(comment_no, callback) {
       var user_id;
-      user_id = this.getCommentByNo[comment_no]['user_id'];
+      user_id = this.getCommentByNo(comment_no)['user_id'];
       return this.db.getData('user', 'id', user_id, callback);
     };
     _Class.prototype.updateComment = function(comment_no, redata) {

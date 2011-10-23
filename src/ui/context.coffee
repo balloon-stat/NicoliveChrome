@@ -80,9 +80,9 @@ contextSelect = (type, target) ->
 		else
 			return false
 
-$.fn.context = (_comment) ->
+$.fn.menu = (_comment) ->
 	comment = _comment
-	@jeegoocontext('custom_context',
+	$(this).jeegoocontext('custom_context',
 		widthOverflowOffset: 0
 		heightOverflowOffset: 3
 		onSelect: (e, target) ->
