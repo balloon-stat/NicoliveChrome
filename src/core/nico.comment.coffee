@@ -1,11 +1,13 @@
 INDEXED_DB_VERSION = '1.5.0'
-COMMENT_NEED_INFO = ['thread', 'no', 'vpos', 'date', 'user_id', 'premium', 'anonymity']
-
-$.nlcm.error.CommentError = class
-	constructor: (@message) ->
-
-	toString: ->
-		"CommentError #{@message}"
+COMMENT_NEED_INFO = [
+	'no'
+	'thread'
+	'vpos'
+	'date'
+	'user_id'
+	'premium'
+	'anonymity'
+]
 
 $.nlcm.Comment = class
 	constructor: (@nc) ->
@@ -18,7 +20,7 @@ $.nlcm.Comment = class
 		@nc.requestComment(@server['thread'], '500')
 		console.log 'コメントサーバに接続しました'
 
-	getComment: (save=yes) ->
+	getComment: (save = yes) ->
 		comments = []
 		while comment = parseComment.call(this)
 			@comments_all[comment['no']] = comment
@@ -90,10 +92,11 @@ $.nlcm.Comment = class
 		vpos = msec2m_s(commented['vpos'] * 10)
 						.map((time) -> fill_zero(time))
 		commented['vpos'] = vpos[0] + ':' + vpos[1]
-		@checkComment(commented)
+		return @checkComment(commented)
 
 	checkComment: (comment) ->
 		is_administor = comment['premium'] is '2' or comment['premium'] is '3'
-		if is_administor and comment['message'] is '/failure'
-			throw new $.nlcm.error.CommentError 'close'
+		is_close = comment['message'] is '/failure' or comment['message'] is '/disconnect'
+		if is_administor and is_close
+			throw new $.nlcm.error.CloseLiveError 'disconnect'
 		return comment

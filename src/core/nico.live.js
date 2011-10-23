@@ -3,8 +3,9 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v=';
   $.nlcm.Live = (function() {
-    var parsePlayerStatus, tid;
+    var CloseLiveError, parsePlayerStatus, readComment, tid;
     tid = {};
+    CloseLiveError = $.nlcm.error.CloseLiveError;
     _Class.getLiveInfo = function(url) {
       var liveid, title;
       liveid = url.match(/lv\d+/) || url.match(/co\d+/);
@@ -35,7 +36,7 @@
         var status;
         status = this.attr('status');
         if (status === 'fail') {
-          throw new Error('getPlayerStatus\'s status is fail');
+          throw new $.nlcm.error.CloseLiveError('getPlayerStatus is fail');
         }
         return live_info.status = status;
       }).find('stream').tap(function() {
@@ -69,13 +70,17 @@
       return this.getPlayerStatusXML(__bind(function() {
         this.comment.connectCommentServer(this.live_info['ms']);
         return tid = setInterval(__bind(function() {
-          return this.readComment(callback);
+          return readComment.call(this, callback);
         }, this), 30);
       }, this));
     };
-    _Class.prototype.readComment = function(callback) {
+    readComment = function(callback) {
       var comment;
-      comment = this.comment.getComment();
+      try {
+        comment = this.comment.getComment();
+      } catch (CloseLiveError) {
+        this.stopComment();
+      }
       if (comment.length > 0) {
         return callback(comment);
       }

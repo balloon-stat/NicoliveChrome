@@ -2,16 +2,7 @@
   var COMMENT_NEED_INFO, INDEXED_DB_VERSION;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   INDEXED_DB_VERSION = '1.5.0';
-  COMMENT_NEED_INFO = ['thread', 'no', 'vpos', 'date', 'user_id', 'premium', 'anonymity'];
-  $.nlcm.error.CommentError = (function() {
-    function _Class(message) {
-      this.message = message;
-    }
-    _Class.prototype.toString = function() {
-      return "CommentError " + this.message;
-    };
-    return _Class;
-  })();
+  COMMENT_NEED_INFO = ['no', 'thread', 'vpos', 'date', 'user_id', 'premium', 'anonymity'];
   $.nlcm.Comment = (function() {
     var fill_zero, msec2m_s, parseComment;
     function _Class(nc) {
@@ -115,10 +106,11 @@
       return this.checkComment(commented);
     };
     _Class.prototype.checkComment = function(comment) {
-      var is_administor;
+      var is_administor, is_close;
       is_administor = comment['premium'] === '2' || comment['premium'] === '3';
-      if (is_administor && comment['message'] === '/failure') {
-        throw new $.nlcm.error.CommentError('close');
+      is_close = comment['message'] === '/failure' || comment['message'] === '/disconnect';
+      if (is_administor && is_close) {
+        throw new $.nlcm.error.CloseLiveError('disconnect');
       }
       return comment;
     };

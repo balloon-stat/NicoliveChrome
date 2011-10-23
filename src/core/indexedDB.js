@@ -46,10 +46,10 @@
         if (this.db.version !== version) {
           createObjectStore.call(this, version);
         }
-        return console.log("DBの通信に成功しました. dbname : " + dbname);
+        return console.log('DBの通信に成功しました.');
       }, this);
       request.onerror = function(event) {
-        throw new Error("DBの通信に失敗しました. dbname : " + dbname);
+        throw new Error('DBの通信に失敗しました.');
       };
     }
     _Class.prototype.addData = function(name, data) {

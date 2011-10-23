@@ -2,6 +2,7 @@ GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v='
 
 $.nlcm.Live = class
 	tid = {}
+	CloseLiveError = $.nlcm.error.CloseLiveError
 
 	@getLiveInfo: (url) ->
 		liveid = url.match(/lv\d+/) \
@@ -27,7 +28,7 @@ $.nlcm.Live = class
 			.tap(->
 				status = @attr('status')
 				if status is 'fail'
-					throw new Error('getPlayerStatus\'s status is fail')
+					throw new $.nlcm.error.CloseLiveError 'getPlayerStatus is fail'
 				live_info.status = status
 			)
 				.find('stream')
@@ -65,12 +66,15 @@ $.nlcm.Live = class
 		@getPlayerStatusXML(=>
 			@comment.connectCommentServer(@live_info['ms'])
 			tid = setInterval(=>
-				@readComment(callback)
+				readComment.call(this, callback)
 			, 30)
 		)
 
-	readComment: (callback) ->
-		comment = @comment.getComment()
+	readComment = (callback) ->
+		try
+			comment = @comment.getComment()
+		catch CloseLiveError
+			@stopComment()
 		callback(comment) if comment.length > 0
 
 	stopComment: ->
