@@ -63,11 +63,11 @@
     });
   };
   userCommentHide = function() {
-    return $('comments tr').each(function() {
+    return $('#comments tr').each(function() {
       var $$, comment_no, current_comment, _comment;
       $$ = $(this);
       comment_no = $$.find('td').eq(0).text();
-      current_comment = comment.getCommentByNo[comment_no];
+      current_comment = comment.getCommentByNo(comment_no);
       if (current_comment['user_id'] !== comment_data['user_id']) {
         return;
       }

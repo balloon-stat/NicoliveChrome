@@ -52,10 +52,10 @@ setColoring = ->
 	)
 
 userCommentHide = () ->
-	$('comments tr').each(->
+	$('#comments tr').each(->
 		$$ = $(this)
 		comment_no = $$.find('td').eq(0).text()
-		current_comment = comment.getCommentByNo[comment_no]
+		current_comment = comment.getCommentByNo(comment_no)
 		return if current_comment['user_id'] isnt comment_data['user_id']
 		_comment = $$.find('td').eq(1).children('div')
 		if _comment.data('cache')

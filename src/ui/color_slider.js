@@ -5,7 +5,7 @@
     red = $('#red').slider('value');
     green = $('#green').slider('value');
     blue = $('#blue').slider('value');
-    hex = $.hexFromRGB(red, green, blue);
+    hex = $.nlcm.Util.hexFromRGB(red, green, blue);
     return $('#swatch').css('background-color', '#' + hex);
   };
   $('#red, #green, #blue').slider({
