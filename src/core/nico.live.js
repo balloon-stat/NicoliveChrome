@@ -85,7 +85,8 @@
       }
     };
     _Class.prototype.stopComment = function() {
-      return clearInterval(tid);
+      clearInterval(tid);
+      return console.log('コメントの取得を終了しました');
     };
     _Class.prototype.close = function() {
       this.nc.close();

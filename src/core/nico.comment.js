@@ -9,6 +9,7 @@
       this.nc = nc;
       this.comments_all = {};
       this.count = 0;
+      this.is_close = false;
       this.db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION);
     }
     _Class.prototype.connectCommentServer = function(server) {
@@ -23,19 +24,29 @@
         save = true;
       }
       comments = [];
-      while (comment = parseComment.call(this)) {
-        this.comments_all[comment['no']] = comment;
-        this.count += 1;
-        comments.push({
-          id: this.count,
-          cell: [comment['no'], comment['message'], comment['user_id'], comment['vpos']]
-        });
-        if (save) {
-          this.db.addData('user', {
-            id: comment['user_id'],
-            name: comment['user_id'],
-            color: 'white'
+      if (this.is_close) {
+        throw new Error('disconnect');
+      }
+      try {
+        while (comment = parseComment.call(this)) {
+          this.comments_all[comment['no']] = comment;
+          this.count += 1;
+          comments.push({
+            id: this.count,
+            cell: [comment['no'], comment['message'], comment['user_id'], comment['vpos']]
           });
+          if (save) {
+            this.db.addData('user', {
+              id: comment['user_id'],
+              name: comment['user_id'],
+              color: 'white'
+            });
+          }
+        }
+      } catch (e) {
+        this.is_close = true;
+        if (e.message === 'disconnect') {
+          return comments;
         }
       }
       return comments;

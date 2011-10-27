@@ -73,12 +73,11 @@ $.nlcm.Live = class
 			comment = @comment.getComment()
 		catch e
 			@stopComment() if e.message is 'disconnect'
-			throw e
+			return
 		callback(comment) if comment.length > 0
 
 	stopComment: ->
 		clearInterval(tid)
-		console.log 'コメントの取得を終了しました'
 
 	close: ->
 		@nc.close()

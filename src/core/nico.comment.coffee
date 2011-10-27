@@ -13,6 +13,7 @@ $.nlcm.Comment = class
 	constructor: (@nc) ->
 		@comments_all = {}
 		@count = 0
+		@is_close = false
 		@db = new $.nlcm.DB('nicolive', INDEXED_DB_VERSION)
 
 	connectCommentServer: (@server) ->
@@ -22,23 +23,28 @@ $.nlcm.Comment = class
 
 	getComment: (save = yes) ->
 		comments = []
-		while comment = parseComment.call(this)
-			@comments_all[comment['no']] = comment
-			@count += 1
-			comments.push(
-				id: @count
-				cell: [
-					comment['no']
-					comment['message']
-					comment['user_id']
-					comment['vpos']
-				]
-			)
-			@db.addData('user',
-				id: comment['user_id']
-				name: comment['user_id']
-				color: 'white'
-			) if save
+		throw new Error 'disconnect' if @is_close
+		try
+			while comment = parseComment.call(this)
+				@comments_all[comment['no']] = comment
+				@count += 1
+				comments.push(
+					id: @count
+					cell: [
+						comment['no']
+						comment['message']
+						comment['user_id']
+						comment['vpos']
+					]
+				)
+				@db.addData('user',
+					id: comment['user_id']
+					name: comment['user_id']
+					color: 'white'
+				) if save
+		catch e
+			@is_close = true
+			return comments if e.message is 'disconnect'
 		return comments
 
 	getCommentByNo: (comment_no) ->
