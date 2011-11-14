@@ -3,15 +3,10 @@ GET_PLAYER_STATUS = 'http://watch.live.nicovideo.jp/api/getplayerstatus?v='
 $.nlcm.Live = class
 	tid = {}
 
-	@getLiveInfo: (url) ->
+	@getLiveId: (url) ->
 		liveid = url.match(/lv\d+/) \
 						or url.match(/co\d+/)
-		title = decodeURI(url).match(/t=.*$/)[0]
-						.slice('t='.length, -1)
-		return {
-			id: liveid[0]
-			title: title
-		}
+		return liveid[0]
 
 	constructor: (@lv_id, plugin_name='plugin') ->
 		plugin = $("##{plugin_name}")
@@ -57,16 +52,14 @@ $.nlcm.Live = class
 			success: (data, dataType) =>
 				@live_info = parsePlayerStatus(data)
 				@lv_id = @live_info.stream['id']
-				callback()
+				callback.call(this)
 		)
 
 	startComment: (callback) ->
-		@getPlayerStatusXML(=>
-			@comment.connectCommentServer(@live_info['ms'])
-			tid = setInterval(=>
-				readComment.call(this, callback)
-			, 30)
-		)
+    @comment.connectCommentServer(@live_info['ms'])
+    tid = setInterval(=>
+      readComment.call(this, callback)
+    , 30)
 
 	readComment = (callback) ->
 		try

@@ -1,11 +1,15 @@
-live_info = $.nlcm.Live.getLiveInfo(document.URL)
-document.title = live_info['title']
-nicolive = new $.nlcm.Live(live_info['id'])
+lvId = $.nlcm.Live.getLiveId(document.URL)
+nicolive = new $.nlcm.Live(lvId)
+
 window.onbeforeunload = ->
 	nicolive.close()
 
-nicolive.startComment((comments) ->
-	$('#comments').comment(comments)
-	nicolive.comment.commentUpdate()
-	$('#comments tr').menu(nicolive.comment)
+nicolive.getPlayerStatusXML(->
+  document.title = @live_info.stream['title']
+  
+  @startComment((comments) ->
+    $('#comments').comment(comments)
+    nicolive.comment.commentUpdate()
+    $('#comments tr').menu(nicolive.comment)
+  )
 )

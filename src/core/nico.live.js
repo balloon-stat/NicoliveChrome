@@ -5,14 +5,10 @@
   $.nlcm.Live = (function() {
     var parsePlayerStatus, readComment, tid;
     tid = {};
-    _Class.getLiveInfo = function(url) {
-      var liveid, title;
+    _Class.getLiveId = function(url) {
+      var liveid;
       liveid = url.match(/lv\d+/) || url.match(/co\d+/);
-      title = decodeURI(url).match(/t=.*$/)[0].slice('t='.length, -1);
-      return {
-        id: liveid[0],
-        title: title
-      };
+      return liveid[0];
     };
     function _Class(lv_id, plugin_name) {
       var nc, plugin;
@@ -58,17 +54,15 @@
         success: __bind(function(data, dataType) {
           this.live_info = parsePlayerStatus(data);
           this.lv_id = this.live_info.stream['id'];
-          return callback();
+          return callback.call(this);
         }, this)
       });
     };
     _Class.prototype.startComment = function(callback) {
-      return this.getPlayerStatusXML(__bind(function() {
-        this.comment.connectCommentServer(this.live_info['ms']);
-        return tid = setInterval(__bind(function() {
-          return readComment.call(this, callback);
-        }, this), 30);
-      }, this));
+      this.comment.connectCommentServer(this.live_info['ms']);
+      return tid = setInterval(__bind(function() {
+        return readComment.call(this, callback);
+      }, this), 30);
     };
     readComment = function(callback) {
       var comment;
